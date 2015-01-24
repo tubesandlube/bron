@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"syscall"
 
-	//"github.com/gophergala/bron/filters"
+//	"github.com/gophergala/bron/filters"
 )
 
 var (
@@ -81,12 +81,16 @@ func main() {
 		for _, commit := range x {
 			checkoutCommit(uuidRepo, commit)
 			fmt.Println("number of files;", countFiles(uuidRepo))
-			fmt.Println("number of files:", countLanguages(uuidRepo))
+			fmt.Println("langs by files:", countLanguages(uuidRepo))
 			files := getFiles(uuidRepo)
 			for _, file := range files {
 				fmt.Println("File:", file, ":", countLines(file))
 			}
 			fmt.Println("number of lines:", countLinesPerLanguage(uuidRepo))
+
+			// XXX simple channel starts, for now
+			parse(files)
+
 		}
 
 		// XXX test template parsing
