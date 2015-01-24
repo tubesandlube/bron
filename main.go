@@ -59,6 +59,10 @@ func main() {
 		// XXX example calls
 		fmt.Println(countFiles(uuidRepo))
 		fmt.Println(countLanguages(uuidRepo))
+
+		// XXX example calls
+		v := getCommits(uuidRepo)
+		fmt.Println(v)
 	}
 
 }
