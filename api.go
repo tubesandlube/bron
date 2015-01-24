@@ -77,8 +77,15 @@ func countAuthors(repoPath string) int {
 
 func countAuthorCommits(repoPath string) map[string]int {
 
-	// XXX stub
 	counts := map[string]int{}
+	_, commits := getCommits(repoPath)
+	for _, commit := range commits {
+		if _, ok := counts[commit["author"]]; ok {
+			counts[commit["author"]] = counts[commit["author"]]+1
+		} else {
+			counts[commit["author"]] = 1
+		}
+	}
 
 	return counts
 

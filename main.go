@@ -93,6 +93,8 @@ func main() {
 			parse(files)
 
 		}
+		z := countAuthorCommits(uuidRepo)
+		fmt.Println(z)
 
 		// XXX test template parsing
 		templates := templateParse("templates")
