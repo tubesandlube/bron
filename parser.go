@@ -2,17 +2,24 @@ package main
 
 import (
 
-	//"bufio"
+	"bufio"
 	"fmt"
 	//"io"
-	"io/ioutil"
-	//"os"
-	//"regexp"
+	//"io/ioutil"
+	"os"
+	"regexp"
 
 )
 
 type Template struct {
 	Name string
+	Extensions []string
+	Structures map[string]string
+	Types map[string]string
+	Names map[string]string
+	Keywords map[string]string
+	Expressions map[string]string
+	Libraries map[string]string
 }
 
 func templateParse(templatePath string) map[string]*Template {
@@ -20,20 +27,24 @@ func templateParse(templatePath string) map[string]*Template {
 	count := 0
 
 	files := getFiles(templatePath)
+	r, _ := regexp.Compile("^templates/\\w+\\.template$")
+	skip, _ := regexp.Compile("^templates/example\\.template$")
+
 	for _, file := range files {
 		// XXX
-		if(file != "templates/example.template" && file != "templates/README.md") {
+		if(r.MatchString(file) && ! skip.MatchString(file)) {
 			count++
 			fmt.Println("found a specific template:", file)
 		}
 	}
+	// XXX fix handling count
 	templates := map[string]*Template{}
 
 	fmt.Println("found a few templates:", count)
 
 	for _, file := range files {
 		// XXX
-		if(file != "templates/example.template" && file != "templates/README.md") {
+		if(r.MatchString(file) && ! skip.MatchString(file)) {
 			t := templateLoad(file)
 			templates[t.Name] = t
 		}
@@ -48,9 +59,24 @@ func templateLoad(templateFile string) *Template {
 	t := new(Template)
 	t.Name = templateFile
 
-	dat, err := ioutil.ReadFile(templateFile)
+	file, err := os.Open(templateFile)
 	check(err)
-	fmt.Print(string(dat))
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		fmt.Println(len(scanner.Text()))
+	}
+
+	if err := scanner.Err(); err != nil {
+		check(err)
+	}
+
+	//dat, err := ioutil.ReadFile(templateFile)
+	//check(err)
+	
+	//fmt.Println("whole file:", dat)
+	fmt.Printf("template has this struct: %v\n", t)
 
 	return t
 
