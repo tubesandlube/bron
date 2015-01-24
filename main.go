@@ -3,10 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 	"os/exec"
 
-	"code.google.com/p/go-uuid/uuid"
 	//"github.com/gophergala/bron/filters"
 )
 
@@ -40,27 +38,18 @@ func main() {
 		}
 	}
 
-	uuidRepo := uuid.New()
-
-	// XXX don't forget to cleanup after we're finished
-	err := os.Mkdir("/tmp/"+uuidRepo, 0644)
-	check(err)
-
-	// XXX this should move up into the initial if/else
+	// XXX testing
 	if repoPtr != "" {
-		cloneCmd := exec.Command("git", "clone", repoPtr, "/tmp/"+uuidRepo)
-		cloneOut, cloneErr := cloneCmd.Output()
-		check(cloneErr)
-		fmt.Println(string(cloneOut))
+		uuidRepo := cloneRepo(repoPtr)
 
 		// XXX temp code to show that the clone worked
-		lsCmd := exec.Command("ls", "-a", "-l", "/tmp/"+uuidRepo)
+		lsCmd := exec.Command("ls", "-a", "-l", uuidRepo)
 		lsOut, lsCmdErr := lsCmd.Output()
 		check(lsCmdErr)
 		fmt.Println(string(lsOut))
 
 		// XXX example calls
-		t := getFiles("/tmp/"+uuidRepo)
+		t := getFiles(uuidRepo)
 		fmt.Println(t)
 
 		// XXX example calls
@@ -68,8 +57,8 @@ func main() {
 		fmt.Println(string(u))
 
 		// XXX example calls
-		fmt.Println(countFiles("/tmp/"+uuidRepo))
-		fmt.Println(countLanguages("/tmp/"+uuidRepo))
+		fmt.Println(countFiles(uuidRepo))
+		fmt.Println(countLanguages(uuidRepo))
 	}
 
 }
