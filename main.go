@@ -44,7 +44,7 @@ func main() {
 
 	// XXX don't forget to cleanup after we're finished
 	err := os.Mkdir("/tmp/"+uuidRepo, 0644)
-    check(err)
+	check(err)
 
 	// XXX this should move up into the initial if/else
 	if repoPtr != "" {
