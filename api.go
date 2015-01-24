@@ -29,3 +29,18 @@ func countLanguages(repoPath string) map[string]int {
 	return languages
 
 }
+
+func countLines(repoPath string) int {
+
+	// XXX stub
+	return 0
+
+}
+
+func countLinesPerLanguage(repoPath string) map[string]int {
+
+	// XXX stub
+	counts := map[string]int{}
+	return counts
+
+}
