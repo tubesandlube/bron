@@ -59,7 +59,7 @@ func templateLoad(templateFile string) *Template {
 	t := new(Template)
 	t.Name = templateFile
 
-	sectionr, _ := regexp.Compile("^\\w+\\:$")
+	sectionr, _ := regexp.Compile("^[\\w\\s]+\\:$")
 	//cleanr, _   := regexp.Compile("[^\\w+]")
 	//paramr, _   := regexp.Compile("^\\s+(\\w+)\\: (.*)$")
 
