@@ -7,28 +7,11 @@ var screen = blessed.screen()
 
 var grid = new contrib.grid({rows: 1, cols: 2})
 
-var grid1 = new contrib.grid({rows: 1, cols: 3})
+var grid1 = new contrib.grid({rows: 1, cols: 1})
 grid1.set(0, 0, contrib.log, 
   { fg: "green"
   , selectedFg: "green"
   , label: 'Server Log'})
-grid1.set(0, 1, contrib.line, 
-  { style: 
-    { line: "yellow"
-    , text: "green"
-    , baseline: "black"}
-  , xLabelPadding: 3
-  , xPadding: 5
-  , label: 'Network Latency (sec)'})
-
-var grid2 = new contrib.grid({rows: 2, cols: 1})
-grid2.set(0, 0, contrib.gauge, {label: 'Deployment Progress'})
-grid2.set(1, 0, contrib.sparkline, 
-  { label: 'Throughput (bits/sec)'
-  , tags: true
-  , style: { fg: 'blue' }})
-
-grid1.set(0, 2, grid2)
 
 var grid3 = new contrib.grid({rows: 1, cols: 2})
 grid3.set(0, 0, contrib.bar, 
@@ -37,7 +20,7 @@ grid3.set(0, 0, contrib.bar,
   , barSpacing: 6
   , xOffset: 0
   , maxHeight: 9})
-grid3.set(0, 1, contrib.table, 
+grid3.set(0, 1, contrib.table,
   { keys: true
   , fg: 'green'
   , label: 'Active Processes'
@@ -67,27 +50,14 @@ grid.applyLayout(screen)
 
 var transactionsLine = grid5.get(0, 0)
 var errorsLine = grid4.get(0, 0)
-var latencyLine = grid1.get(0, 1)
 var map = grid5.get(1, 0)
 var log = grid1.get(0, 0)
 var table = grid3.get(0,1)
-var sparkline = grid2.get(1, 0)
-var gauge = grid2.get(0, 0)
 var bar = grid3.get(0, 0)
-
 
 //dummy data
 var servers = ['US1', 'US2', 'EU1', 'AU1', 'AS1', 'JP1']
 var commands = ['grep', 'node', 'java', 'timer', '~/ls -l', 'netns', 'watchdog', 'gulp', 'tar -xvf', 'awk', 'npm install']
-
-
-//set dummy data on gauge
-var gauge_percent = 20
-gauge.setPercent(gauge_percent++)  
-//setInterval(function() {
-//  if (gauge_percent>100) gauge_percent = 0  
-//}, 200)
-
 
 //set dummy data on bar chart
 function fillBar() {
@@ -100,13 +70,12 @@ function fillBar() {
 fillBar()
 setInterval(fillBar, 2000)
 
-
 //set dummy data for table
 function generateTable() {
    var data = []
 
    for (var i=0; i<30; i++) {
-     var row = []          
+     var row = []
      row.push(commands[Math.round(Math.random()*(commands.length-1))])
      row.push(Math.round(Math.random()*5))
      row.push(Math.round(Math.random()*100))
@@ -121,7 +90,6 @@ generateTable()
 table.focus()
 setInterval(generateTable, 3000)
 
-
 //set log dummy data
 setInterval(function() {
    var rnd = Math.round(Math.random()*2)
@@ -130,7 +98,6 @@ setInterval(function() {
    else if (rnd==2) log.log('avg. wait time ' + Math.random().toFixed(2))
    screen.render()
 }, 500)
-
 
 //set spark dummy data
 var spark1 = [1,2,5,2,1,5,1,2,5,2,1,5,4,4,5,4,1,5,1,2,5,2,1,5,1,2,5,2,1,5,1,2,5,2,1,5]
@@ -141,13 +108,10 @@ setInterval(refreshSpark, 1000)
 
 function refreshSpark() {
   spark1.shift()
-  spark1.push(Math.random()*5+1)       
+  spark1.push(Math.random()*5+1)
   spark2.shift()
-  spark2.push(Math.random()*5+1)       
-  sparkline.setData(['Server1', 'Server2'], [spark1, spark2])  
+  spark2.push(Math.random()*5+1)
 }
-
-
 
 //set map dummy markers
 var marker = true
@@ -165,9 +129,6 @@ setInterval(function() {
    screen.render()
 }, 1000)
 
-
-
-
 //set line charts dummy data
 
 var transactionsData = {
@@ -180,14 +141,8 @@ var errorsData = {
    y: [30, 50, 70, 40, 50, 20]
 }
 
-var latencyData = {
-   x: ['t1', 't2', 't3', 't4'],
-   y: [5, 1, 7, 5]
-}
-
 setLineData(transactionsData, transactionsLine)
 setLineData(errorsData, errorsLine)
-setLineData(latencyData, latencyLine)
 
 setInterval(function() {
    setLineData(transactionsData, transactionsLine)
@@ -199,19 +154,13 @@ setInterval(function() {
    screen.render()
 }, 1500)
 
-setInterval(function() {   
-   setLineData(latencyData, latencyLine)
-   screen.render()
-}, 5000)
-
 function setLineData(mockData, line) {
   var last = mockData.y[mockData.y.length-1]
   mockData.y.shift()
-  var num = Math.max(last + Math.round(Math.random()*10) - 5, 10)    
-  mockData.y.push(num)     
+  var num = Math.max(last + Math.round(Math.random()*10) - 5, 10)
+  mockData.y.push(num)
   line.setData(mockData.x, mockData.y)
 }
-
 
 screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
