@@ -2,5 +2,5 @@ extensions:
 	.go
 
 names:
-	comments: /* $comment */ ML
-	comments: // $comment
+	comments: /* $comment */
+	comments: //$comment

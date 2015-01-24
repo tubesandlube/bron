@@ -10,8 +10,8 @@ structures:
 	loops: while
 
 types:
-	arrays: $array = []
-	dictionaries: $dict = {}
+	arrays: $array = [.*]
+	dictionaries: $dict = {.*}
 
 names:
 	variables: $variable =
