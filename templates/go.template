@@ -1,0 +1,6 @@
+extensions:
+	.go
+
+names:
+	comments: /* $comment */ ML
+	comments: // $comment
