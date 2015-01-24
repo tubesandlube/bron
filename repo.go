@@ -19,9 +19,10 @@ func getDiff(repoPath string, currentCommit string, previousCommit string) []byt
 
 }
 
-func getCommits(repoPath string) map[string]map[string]string {
+func getCommits(repoPath string) ([]string, map[string]map[string]string) {
 
 	commits := map[string]map[string]string{}
+	order := []string{}
 
 	revCmd := exec.Command("git", "--git-dir="+repoPath+"/.git", "rev-list", "--all", "--pretty=format:\"%H|%an|%at\"")
 	revOut, revErr := revCmd.Output()
@@ -35,6 +36,7 @@ func getCommits(repoPath string) map[string]map[string]string {
 			if _, ok := commits[prevCommit]; ok {
 				commits[prevCommit]["prevCommit"] = components[0]
 			}
+			order = append(order, components[0])
 			kvs := map[string]string{}
 			kvs["prevCommit"] = components[0]
 			kvs["author"] = components[1]
@@ -44,7 +46,7 @@ func getCommits(repoPath string) map[string]map[string]string {
 		}
 	}
 
-	return commits
+	return order, commits
 
 }
 
