@@ -66,6 +66,10 @@ func main() {
 		// XXX example calls
 		u := getFileContents(t[0])
 		fmt.Println(string(u))
+
+		// XXX example calls
+		fmt.Println(countFiles("/tmp/"+uuidRepo))
+		fmt.Println(countLanguages("/tmp/"+uuidRepo))
 	}
 
 }
