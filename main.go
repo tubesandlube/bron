@@ -3,15 +3,20 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 	"os/exec"
+	"syscall"
 
 	//"github.com/gophergala/bron/filters"
 )
 
 var (
-	repoPtr     string
-	repoPathPtr string
-	verbosePtr  int
+	blessedPtr   string
+	dashboardPtr string
+	repoPtr      string
+	repoPathPtr  string
+	verbosePtr   int
+	vizPtr       bool
 )
 
 func check(e error) {
@@ -22,9 +27,12 @@ func check(e error) {
 
 func main() {
 
+	flag.StringVar(&blessedPtr, "blessedPath", "/go/src/github.com/yaronn/blessed-contrib", "Path where blessed-contrib is installed")
+	flag.StringVar(&dashboardPtr, "dashboard", "example", "Name of dashboard to use for visualization")
 	flag.StringVar(&repoPtr, "repo", "", "Git repository to scan")
 	flag.StringVar(&repoPathPtr, "path", "", "Git repository file path to scan")
 	flag.IntVar(&verbosePtr, "v", 1, "verbosity level")
+	flag.BoolVar(&vizPtr, "viz", false, "Visualize the results, requires blessed")
 
 	flag.Parse()
 
@@ -84,6 +92,17 @@ func main() {
 		// XXX test template parsing
 		templates := templateParse("templates")
 		fmt.Println(templates)
+
+		if vizPtr {
+			chErr := os.Chdir(blessedPtr)
+			check(chErr)
+			binary, lookErr := exec.LookPath("node")
+			check(lookErr)
+			args := []string{"node", "./dashboards/"+dashboardPtr+"/dashboard.js"}
+			env := os.Environ()
+			execErr := syscall.Exec(binary, args, env)
+			check(execErr)
+		}
 	}
 
 }
