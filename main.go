@@ -3,7 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+	"os/exec"
 
+	"code.google.com/p/go-uuid/uuid"
 	//"github.com/gophergala/bron/filters"
 )
 
@@ -12,6 +15,12 @@ var (
 	repoPathPtr string
 	verbosePtr  int
 )
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
 
 func main() {
 
@@ -29,6 +38,26 @@ func main() {
 		if verbosePtr > 0 {
 			fmt.Println("going to scan repository", repoPtr, "...")
 		}
+	}
+
+	uuidRepo := uuid.New()
+
+	// XXX don't forget to cleanup after we're finished
+	err := os.Mkdir("/tmp/"+uuidRepo, 0644)
+    check(err)
+
+	// XXX this should move up into the initial if/else
+	if repoPtr != "" {
+		cloneCmd := exec.Command("git", "clone", repoPtr, "/tmp/"+uuidRepo)
+		cloneOut, cloneErr := cloneCmd.Output()
+		check(cloneErr)
+		fmt.Println(string(cloneOut))
+
+		// XXX temp code to show that the clone worked
+		lsCmd := exec.Command("ls", "-a", "-l", "/tmp/"+uuidRepo)
+		lsOut, lsCmdErr := lsCmd.Output()
+		check(lsCmdErr)
+		fmt.Println(string(lsOut))
 	}
 
 }
