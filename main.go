@@ -61,7 +61,8 @@ func main() {
 		fmt.Println(countLanguages(uuidRepo))
 
 		// XXX example calls
-		v := getCommits(uuidRepo)
+		x, v := getCommits(uuidRepo)
+		fmt.Println(x)
 		fmt.Println(v)
 
 		// XXX test template parsing
