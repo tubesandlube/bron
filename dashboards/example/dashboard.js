@@ -50,7 +50,7 @@ grid5.set(0, 0, contrib.line,
   { showNthLabel: 5
   , maxY: 100
   , label: 'Number of Languages'})
-grid5.set(1, 0, contrib.map, {label: 'Number of Commits'})
+grid5.set(1, 0, contrib.map, {label: 'Number of Authors'})
 grid.set(0, 0, grid5)
 grid.set(0, 1, grid4)
 

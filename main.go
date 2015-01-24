@@ -76,6 +76,7 @@ func main() {
 		fmt.Println(x[1])
 		y := getDiff(uuidRepo, x[0], x[1])
 		fmt.Print(string(y))
+		fmt.Println("number of commits:", countCommits(uuidRepo))
 
 		// XXX example calls through all commits
 		for _, commit := range x {

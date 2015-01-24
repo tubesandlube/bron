@@ -60,10 +60,10 @@ func countLinesPerLanguage(repoPath string) map[string]int {
 
 func countCommits(repoPath string) int {
 
-	// XXX stub
-	count := 0
+	commits, _ := getCommits(repoPath)
 
-	return count
+	return len(commits)
+
 }
 
 func countAuthors(repoPath string) int {
