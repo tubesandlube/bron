@@ -58,7 +58,7 @@ func templateLoad(templateFile string) *Template {
 	t.Name = templateFile
 
 	sectionr, _ := regexp.Compile("^[\\w\\s]+\\:$")
-	//cleanr, _   := regexp.Compile("[^\\w+]")
+	cleanr, _   := regexp.Compile("^\\s*")
 	//paramr, _   := regexp.Compile("^\\s+(\\w+)\\: (.*)$")
 
 	file, err := os.Open(templateFile)
@@ -72,13 +72,14 @@ func templateLoad(templateFile string) *Template {
 			fmt.Println("found section", section, "from file", templateFile)
 		} else {
 			parts := regexp.MustCompile(": ").Split(scanner.Text(), 2)
+			param := cleanr.ReplaceAllString(parts[0], "")
 			if(len(parts) > 1) {
-				fmt.Println("adding content match", parts[1], "to param", parts[0])
+				fmt.Println("adding content match", parts[1], "to param", param)
 			} else {
-				if(len(parts[0]) > 0) {
-					fmt.Println("adding single param", parts[0])
+				if(len(param) > 0) {
+					fmt.Println("adding single param", param)
 				} else {
-					//fmt.Println("skipping blank line", parts[0])
+					//fmt.Println("skipping blank line", param)
 				}
 			}
 		}
