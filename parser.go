@@ -4,8 +4,6 @@ import (
 
 	"bufio"
 	"fmt"
-	//"io"
-	//"io/ioutil"
 	"os"
 	"regexp"
 
@@ -90,10 +88,6 @@ func templateLoad(templateFile string) *Template {
 		check(err)
 	}
 
-	//dat, err := ioutil.ReadFile(templateFile)
-	//check(err)
-	
-	//fmt.Println("whole file:", dat)
 	//fmt.Printf("template has this struct: %v\n", t)
 
 	return t
