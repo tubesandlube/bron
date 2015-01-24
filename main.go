@@ -58,6 +58,14 @@ func main() {
 		lsOut, lsCmdErr := lsCmd.Output()
 		check(lsCmdErr)
 		fmt.Println(string(lsOut))
+
+		// XXX example calls
+		t := getFiles("/tmp/"+uuidRepo)
+		fmt.Println(t)
+
+		// XXX example calls
+		u := getFileContents(t[0])
+		fmt.Println(string(u))
 	}
 
 }
