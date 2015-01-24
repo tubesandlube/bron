@@ -95,6 +95,8 @@ func main() {
 		}
 		z := countAuthorCommits(uuidRepo)
 		fmt.Println(z)
+		s := countAuthors(uuidRepo)
+		fmt.Println(s)
 
 		// XXX test template parsing
 		templates := templateParse("templates")

@@ -68,10 +68,9 @@ func countCommits(repoPath string) int {
 
 func countAuthors(repoPath string) int {
 
-	// XXX stub
-	count := 0
+	authors := countAuthorCommits(repoPath)
 
-	return count
+	return len(authors)
 
 }
 
