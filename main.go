@@ -72,8 +72,13 @@ func main() {
 		// XXX example calls through all commits
 		for _, commit := range x {
 			checkoutCommit(uuidRepo, commit)
-			fmt.Println(countFiles(uuidRepo))
-			fmt.Println(countLanguages(uuidRepo))
+			fmt.Println("number of files;", countFiles(uuidRepo))
+			fmt.Println("number of files:", countLanguages(uuidRepo))
+			files := getFiles(uuidRepo)
+			for _, file := range files {
+				fmt.Println("File:", file, ":", countLines(file))
+			}
+			fmt.Println("number of lines:", countLinesPerLanguage(uuidRepo))
 		}
 
 		// XXX test template parsing

@@ -30,17 +30,28 @@ func countLanguages(repoPath string) map[string]int {
 
 }
 
-func countLines(repoPath string) int {
+func countLines(file string) int {
 
-	// XXX stub
-	return 0
+	data := getFileContents(file)
+	lines := strings.Split(string(data), "\n")
+
+	return len(lines)
 
 }
 
 func countLinesPerLanguage(repoPath string) map[string]int {
 
-	// XXX stub
 	counts := map[string]int{}
+	files := getFiles(repoPath)
+	for _, file := range files {
+		ext := strings.Split(file, ".")
+		if _, ok := counts[ext[len(ext)-1]]; ok {
+			counts[ext[len(ext)-1]] = counts[ext[len(ext)-1]]+countLines(file)
+		} else {
+			counts[ext[len(ext)-1]] = countLines(file)
+		}
+	}
+
 	return counts
 
 }
