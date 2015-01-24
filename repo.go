@@ -19,12 +19,12 @@ func getFiles(repoPath string) []string {
 			fmt.Fprintln(os.Stderr, err)
 			continue
 		}
-		if !strings.Contains(walker.Path(), ".git") {
+		if !strings.Contains(walker.Path(), ".git") && strings.Contains(walker.Path(), ".") {
 			files = append(files, walker.Path())
 		}
 	}
 
-	return files[1:]
+	return files
 
 }
 
