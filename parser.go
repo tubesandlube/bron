@@ -59,13 +59,18 @@ func templateLoad(templateFile string) *Template {
 	t := new(Template)
 	t.Name = templateFile
 
+	section, _ := regexp.Compile("^\\w+\\:$")
+
 	file, err := os.Open(templateFile)
 	check(err)
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		fmt.Println(len(scanner.Text()))
+		if(section.MatchString(scanner.Text())) {
+			section := scanner.Text()[:len(scanner.Text())-1]
+			fmt.Println("found section", section, "from file", templateFile)
+		}
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -76,7 +81,7 @@ func templateLoad(templateFile string) *Template {
 	//check(err)
 	
 	//fmt.Println("whole file:", dat)
-	fmt.Printf("template has this struct: %v\n", t)
+	//fmt.Printf("template has this struct: %v\n", t)
 
 	return t
 
