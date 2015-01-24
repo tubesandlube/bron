@@ -26,7 +26,7 @@ func getCommits(repoPath string) ([]string, map[string]map[string]string) {
 	commits := map[string]map[string]string{}
 	order := []string{}
 
-	revCmd := exec.Command("git", "--git-dir="+repoPath+"/.git", "rev-list", "--all", "--pretty=format:\"%H|%an|%at\"")
+	revCmd := exec.Command("git", "--git-dir="+repoPath+"/.git", "rev-list", "--all", "--no-merges", "--pretty=format:\"%H|%an|%at\"")
 	revOut, revErr := revCmd.Output()
 	check(revErr)
 	lines := strings.Split(string(revOut), "\n")
@@ -82,10 +82,16 @@ func getFileContents(filename string) []byte {
 
 func checkoutCommit(repoPath string, commit string) {
 
-	checkoutCmd := exec.Command("git", "--git-dir="+repoPath+"/.git", "checkout", commit)
+	cwd, wdErr := os.Getwd()
+	check(wdErr)
+	chErr := os.Chdir(repoPath)
+	check(chErr)
+	checkoutCmd := exec.Command("git", "checkout", commit)
 	checkoutOut, checkoutErr := checkoutCmd.Output()
 	check(checkoutErr)
 	fmt.Println(string(checkoutOut))
+	chErr = os.Chdir(cwd)
+	check(chErr)
 
 }
 

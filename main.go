@@ -69,10 +69,12 @@ func main() {
 		y := getDiff(uuidRepo, x[0], x[1])
 		fmt.Print(string(y))
 
-		// XXX currently panicking
-		//checkoutCommit(uuidRepo, x[len(x)-2])
-		//fmt.Println(countFiles(uuidRepo))
-		//fmt.Println(countLanguages(uuidRepo))
+		// XXX example calls through all commits
+		for _, commit := range x {
+			checkoutCommit(uuidRepo, commit)
+			fmt.Println(countFiles(uuidRepo))
+			fmt.Println(countLanguages(uuidRepo))
+		}
 
 		// XXX test template parsing
 		templates := templateParse("templates")
