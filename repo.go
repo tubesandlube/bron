@@ -13,9 +13,11 @@ import (
 
 func getDiff(repoPath string, currentCommit string, previousCommit string) []byte {
 
-	// git diff currentCommit previousCommit
-	diff := []byte{}
-	return diff
+	diffCmd := exec.Command("git", "--git-dir="+repoPath+"/.git", "diff", currentCommit, previousCommit)
+	diffOut, diffErr := diffCmd.Output()
+	check(diffErr)
+
+	return diffOut
 
 }
 
@@ -32,7 +34,7 @@ func getCommits(repoPath string) ([]string, map[string]map[string]string) {
 	for i, val := range lines {
 		if i % 2 != 0 {
 			// XXX error check to ensure there are exactly 3 splits
-			components := strings.Split(val, "|")
+			components := strings.Split(val[1:len(val)-1], "|")
 			if _, ok := commits[prevCommit]; ok {
 				commits[prevCommit]["prevCommit"] = components[0]
 			}
@@ -80,7 +82,10 @@ func getFileContents(filename string) []byte {
 
 func checkoutCommit(repoPath string, commit string) {
 
-	// XXX stub
+	checkoutCmd := exec.Command("git", "--git-dir="+repoPath+"/.git", "checkout", commit)
+	checkoutOut, checkoutErr := checkoutCmd.Output()
+	check(checkoutErr)
+	fmt.Println(string(checkoutOut))
 
 }
 

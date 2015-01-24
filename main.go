@@ -64,6 +64,15 @@ func main() {
 		x, v := getCommits(uuidRepo)
 		fmt.Println(x)
 		fmt.Println(v)
+		fmt.Println(x[0])
+		fmt.Println(x[1])
+		y := getDiff(uuidRepo, x[0], x[1])
+		fmt.Print(string(y))
+
+		// XXX currently panicking
+		//checkoutCommit(uuidRepo, x[len(x)-2])
+		//fmt.Println(countFiles(uuidRepo))
+		//fmt.Println(countLanguages(uuidRepo))
 
 		// XXX test template parsing
 		templates := templateParse("templates")
