@@ -2,8 +2,12 @@ package main
 
 import (
 
+	//"bufio"
 	"fmt"
-//	"regexp"
+	//"io"
+	"io/ioutil"
+	//"os"
+	//"regexp"
 
 )
 
@@ -27,9 +31,13 @@ func templateParse(templatePath string) map[string]*Template {
 
 	fmt.Println("found a few templates:", count)
 
-	//for _, file := range files {
-	//	t := templateLoad(file)
-	//}
+	for _, file := range files {
+		// XXX
+		if(file != "templates/example.template" && file != "templates/README.md") {
+			t := templateLoad(file)
+			templates[t.Name] = t
+		}
+	}
 
 	return templates
 
@@ -39,6 +47,10 @@ func templateLoad(templateFile string) *Template {
 
 	t := new(Template)
 	t.Name = templateFile
+
+	dat, err := ioutil.ReadFile(templateFile)
+	check(err)
+	fmt.Print(string(dat))
 
 	return t
 
