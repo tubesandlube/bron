@@ -10,3 +10,5 @@ ADD . /go/src/github.com/gophergala/bron
 RUN go install github.com/gophergala/bron
 RUN go install github.com/gophergala/bron/api
 RUN go get -d github.com/libgit2/git2go
+
+ENTRYPOINT /go/bin/bron
