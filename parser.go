@@ -26,8 +26,8 @@ func templateParse(templatePath string) map[string]*Template {
 
 	count := 0
 
-	files := getFiles(templatePath)
-	r, _ := regexp.Compile("^templates/\\w+\\.template$")
+	files   := getFiles(templatePath)
+	r, _    := regexp.Compile("^templates/\\w+\\.template$")
 	skip, _ := regexp.Compile("^templates/example\\.template$")
 
 	for _, file := range files {
@@ -59,7 +59,9 @@ func templateLoad(templateFile string) *Template {
 	t := new(Template)
 	t.Name = templateFile
 
-	section, _ := regexp.Compile("^\\w+\\:$")
+	sectionr, _ := regexp.Compile("^\\w+\\:$")
+	//cleanr, _   := regexp.Compile("[^\\w+]")
+	//paramr, _   := regexp.Compile("^\\s+(\\w+)\\: (.*)$")
 
 	file, err := os.Open(templateFile)
 	check(err)
@@ -67,9 +69,20 @@ func templateLoad(templateFile string) *Template {
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		if(section.MatchString(scanner.Text())) {
+		if(sectionr.MatchString(scanner.Text())) {
 			section := scanner.Text()[:len(scanner.Text())-1]
 			fmt.Println("found section", section, "from file", templateFile)
+		} else {
+			parts := regexp.MustCompile(": ").Split(scanner.Text(), 2)
+			if(len(parts) > 1) {
+				fmt.Println("adding content match", parts[1], "to param", parts[0])
+			} else {
+				if(len(parts[0]) > 0) {
+					fmt.Println("adding single param", parts[0])
+				} else {
+					//fmt.Println("skipping blank line", parts[0])
+				}
+			}
 		}
 	}
 
