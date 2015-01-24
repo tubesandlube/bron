@@ -55,3 +55,38 @@ func countLinesPerLanguage(repoPath string) map[string]int {
 	return counts
 
 }
+
+func countCommits(repoPath string) int {
+
+	// XXX stub
+	count := 0
+
+	return count
+}
+
+func countAuthors(repoPath string) int {
+
+	// XXX stub
+	count := 0
+
+	return count
+
+}
+
+func countAuthorCommits(repoPath string) map[string]int {
+
+	// XXX stub
+	counts := map[string]int{}
+
+	return counts
+
+}
+
+func countAuthorLines(repoPath string) map[string]int {
+
+	// XXX stub
+	counts := map[string]int{}
+
+	return counts
+
+}

@@ -3,6 +3,14 @@ var blessed = require('blessed')
 
 var screen = blessed.screen()
 
+// XXX
+// authors and number commits they've contributed (all time)
+// number of lines per language (all time)
+// number of languages (timeline)
+// number of lines (timeline)
+// number of commits (timeline)
+// number of files (timeline)
+
 //create layout and widgets
 
 var grid = new contrib.grid({rows: 1, cols: 2})
@@ -93,7 +101,7 @@ setInterval(generateTable, 3000)
 //set log dummy data
 setInterval(function() {
    var rnd = Math.round(Math.random()*2)
-   if (rnd==0) log.log('starting process ' + commands[Math.round(Math.random()*(commands.length-1))])   
+   if (rnd==0) log.log('starting process ' + commands[Math.round(Math.random()*(commands.length-1))])
    else if (rnd==1) log.log('terminating server ' + servers[Math.round(Math.random()*(servers.length-1))])
    else if (rnd==2) log.log('avg. wait time ' + Math.random().toFixed(2))
    screen.render()
