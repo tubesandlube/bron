@@ -1,5 +1,11 @@
 # bron
 
+## Dependencies
+
+```
+git
+```
+
 ## Installation
 
 #### Run on Nitrous:
