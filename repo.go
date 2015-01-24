@@ -11,6 +11,15 @@ import (
 	"github.com/kr/fs"
 )
 
+func getAuthors(repoPath string) []string {
+
+	// XXX stub
+	authors := []string{}
+
+	return authors
+
+}
+
 func getDiff(repoPath string, currentCommit string, previousCommit string) []byte {
 
 	diffCmd := exec.Command("git", "--git-dir="+repoPath+"/.git", "diff", currentCommit, previousCommit)
