@@ -63,6 +63,10 @@ func main() {
 		// XXX example calls
 		v := getCommits(uuidRepo)
 		fmt.Println(v)
+
+		// XXX test template parsing
+		templates := templateParse("templates")
+		fmt.Println(templates)
 	}
 
 }
