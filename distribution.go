@@ -7,11 +7,6 @@ import (
 
 )
 
-//func filterDistribution(contentFile string, wg *sync.WaitGroup) map[string]int {
-//func filterDistribution(contentFile string, c chan string, wg *sync.WaitGroup) {
-//func filterDistribution(contentFile string, c chan string) {
-//func filterDistribution(contentFile string, in <-chan *string, out chan<- *string) {
-
 func filterDistribution(contentFile string) map[string]int {
 
 	counts := map[string]int{}
