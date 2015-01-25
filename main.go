@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-
 	"github.com/mgutz/ansi"
 
 //	"github.com/gophergala/bron/filters"
@@ -19,12 +18,6 @@ var (
 	vizPtr       bool
 )
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
 func colorize(msg string) string {
 
 	lime  := ansi.ColorCode("green+h:black")
@@ -32,6 +25,12 @@ func colorize(msg string) string {
 
 	return(lime + msg + reset)
 
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }
 
 func main() {
@@ -64,26 +63,11 @@ func main() {
 		x, _ := getCommits(uuidRepo)
 		for _, commit := range x {
 			checkoutCommit(uuidRepo, commit)
-			fmt.Println("number of files:", countFiles(uuidRepo))
-			fmt.Println("langs by files:", countLanguages(uuidRepo))
-			files := getFiles(uuidRepo)
-			for _, file := range files {
-				fmt.Println("File:", file, ":", countLines(file))
-			}
-			fmt.Println("number of lines:", countLinesPerLanguage(uuidRepo))
-
 			// XXX simple channel starts, for now
-			fmt.Println("started parsing...")
+			files := getFiles(uuidRepo)
 			parse(files)
-			fmt.Println("finished parsing")
-
 		}
 		checkoutCommit(uuidRepo, x[0])
-		z := countAuthorCommits(uuidRepo)
-		fmt.Println(z)
-		s := countAuthors(uuidRepo)
-		//fmt.Println(colorize(string(s)))
-		fmt.Println(s)
 
 		// XXX test template parsing
 		templates := templateParse("templates")
