@@ -69,12 +69,12 @@ func updateData(filename string, varName string, data string) {
 
 }
 
-func tableData(rows map[string]int) string {
+func tableData(rowVals []int, invRows map[int]string) string {
 
 	table := "["
 
-	for key := range rows {
-		table += "['"+strings.Replace(key, "'", "\\'", -1)+"', '"+strconv.Itoa(rows[key])+"'], "
+	for i := len(rowVals)-1; i >= 0; i-- {
+		table += "['"+strings.Replace(invRows[rowVals[i]], "'", "\\'", -1)+"', '"+strconv.Itoa(rowVals[i])+"'], "
 	}
 	table = table[0:len(table)-2]+"]"
 
@@ -82,14 +82,14 @@ func tableData(rows map[string]int) string {
 
 }
 
-func barChartData(bars map[string]int) (string, string) {
+func barChartData(barVals []int, invBars map[int]string) (string, string) {
 
 	x := "["
 	y := "["
 
-	for key := range bars {
-		x += "'"+strings.Replace(key, "'", "\\'", -1)+"', "
-		y += "'"+strconv.Itoa(bars[key])+"', "
+	for _, k := range barVals {
+		x += "'"+strings.Replace(invBars[k], "'", "\\'", -1)+"', "
+		y += "'"+strconv.Itoa(k)+"', "
 	}
 	x = x[0:len(x)-2]+"]"
 	y = y[0:len(y)-2]+"]"
@@ -98,11 +98,45 @@ func barChartData(bars map[string]int) (string, string) {
 
 }
 
+func bubbleSort(arr[] int) []int {
+
+	for i:=1; i< len(arr); i++ {
+		for j:=0; j < len(arr)-i; j++ {
+			if (arr[j] > arr[j+1]) {
+				arr[j], arr[j+1] = arr[j+1], arr[j]
+			}
+		}
+	}
+
+	return arr
+
+}
+
+func sortMap(m map[string]int) ([]int, map[int]string) {
+
+	// inverting map
+	invMap := make(map[int]string, len(m))
+	for k,v := range m {
+		invMap[v] = k
+	}
+
+	// sorting
+	sortedKeys := make([]int, len(invMap))
+	var i int = 0
+	for k := range invMap {
+		sortedKeys[i] = k
+		i++
+	}
+
+	return bubbleSort(sortedKeys), invMap
+
+}
+
 func updateDashboardData(uuidRepo string, repoPtr string, dashboard string) {
 
 	// get data for dashboard
-	languages, languageLines := barChartData(countLinesPerLanguage(uuidRepo))
-	authors := tableData(countAuthorCommits(uuidRepo))
+	languages, languageLines := barChartData(sortMap(countLinesPerLanguage(uuidRepo)))
+	authors := tableData(sortMap(countAuthorCommits(uuidRepo)))
 
 	// XXX cleanup line charts
 	numLanguagesDataX := "x:["
@@ -115,7 +149,6 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string) {
 	numFilesDataY := "y:["
 
 	x, y := getCommits(uuidRepo)
-	// XXX x needs to be reversed, note don't simply sort and reverse, order matters
 	for i := len(x)-1; i >= 0; i-- {
 		checkoutCommit(uuidRepo, x[i])
 
