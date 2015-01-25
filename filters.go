@@ -18,8 +18,8 @@ type filterOutputs struct {
 
 func parse(files []string) {
 
-	c := make(chan result)
-	errc := make(chan error, 1)
+	//c := make(chan result)
+	//errc := make(chan error, 1)
 	for _, file := range files {
 		fmt.Println("going to parse...", file)
 		go filterDistribution(file)
