@@ -25,6 +25,7 @@ func filterDistribution(contentFile string) map[string]int {
 
 	counts["loc"] = len(file)
 
-	return counts
+	
+	//return counts
 
 }
