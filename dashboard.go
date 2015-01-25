@@ -19,6 +19,9 @@ func checkData(repoName string) bool {
 
 func saveData(repoName string, vals ...string) {
 
+	err := os.MkdirAll("db/"+repoName, 0644)
+	check(err)
+
 	// XXX stub
 
 }
@@ -118,7 +121,7 @@ func updateDashboardData(uuidRepo string, repoPtr string) {
 	numAuthorsData := "{"+numAuthorsDataX[0:len(numAuthorsDataX)-2]+"], "+numAuthorsDataY[0:len(numAuthorsDataY)-2]+"]"+"}"
 	numFilesData := "{"+numFilesDataX[0:len(numFilesDataX)-2]+"], "+numFilesDataY[0:len(numFilesDataY)-2]+"]"+"}"
 
-	saveData(repoPtr, languages, languageLines, authors, numLanguagesData, numLinesData, numAuthorsData, numFilesData)
+	saveData(repoPtr, "languages|"+languages, "languageLines|"+languageLines, "authors|"+authors, "numLanguagesData|"+numLanguagesData, "numLinesData|"+numLinesData, "numAuthorsData|"+numAuthorsData, "numFilesData|"+numFilesData)
 
 	chErr := os.Chdir(blessedPtr)
 	check(chErr)

@@ -76,6 +76,9 @@ func main() {
 		if vizPtr {
 			if !forcePtr {
 				if checkData(repoPtr) {
+					if verbosePtr > 0 {
+						fmt.Println("found existing data for", repoPtr, "using that ...")
+					}
 					showDashboard()
 				} else {
 					updateDashboardData(uuidRepo, repoPtr)
