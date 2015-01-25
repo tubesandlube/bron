@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -32,10 +33,24 @@ func countLanguages(repoPath string) map[string]int {
 
 }
 
-func getLanguages(map[string]int) {
+func determineLanguage(templates map[string]*Template, file string) string {
 
+	fmt.Println("checking language type for file", file)
 
-	// XXX tie-into languages defined in templates
+	parts := strings.Split(file, ".")
+	ext := "." + parts[len(parts)-1];
+	language := "unknown"
+
+	for _, t := range templates {
+		e := t.Extensions
+		//fmt.Println("checking provided extension", ext, "against template extension:", e)
+		if ext == e {
+			fmt.Println("found match...")
+			language = t.Name
+		}
+	}
+
+	return language
 
 }
 
