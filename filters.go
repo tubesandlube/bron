@@ -9,7 +9,8 @@ import (
 func parse(files []string) {
 
 	for _, file := range files {
-		fmt.Println(colorize("going to parse...", file))
+		d := "going to parse..." + file
+		fmt.Println(colorize(d))
 		filterDistribution(file)
 	}
 	fmt.Println("all done")
