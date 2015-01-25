@@ -12,7 +12,7 @@ grid1.set(0, 0, contrib.line,
     , text: "white"
     , baseline: "black"}
   , label: 'Number of Files'
-  , maxY: 60})
+  , maxY: 100})
 var grid2 = new contrib.grid({rows: 2, cols: 1})
 grid2.set(0, 0, contrib.bar,
   { label: 'Lines per Language'
@@ -32,7 +32,7 @@ grid3.set(0, 0, contrib.line,
     , text: "white"
     , baseline: "black"}
   , label: 'Number of Lines'
-  , maxY: 60})
+  , maxY: 1000})
 grid3.set(1, 0, grid2)
 grid3.set(2, 0, grid1)
 var grid4 = new contrib.grid({rows: 2, cols: 1})
@@ -46,7 +46,7 @@ grid4.set(1, 0, contrib.line,
     , text: "white"
     , baseline: "black"}
   , label: 'Number of Authors'
-  , maxY: 60})
+  , maxY: 10})
 grid.set(0, 0, grid4)
 grid.set(0, 1, grid3)
 grid.applyLayout(screen)
@@ -84,8 +84,8 @@ function setLineData(data, line) {
 }
 setLineData(numLanguagesData, numLanguages)
 setLineData(numLinesData, numLines)
-setLineData(numLinesData, numAuthors)
-setLineData(numLinesData, numFiles)
+setLineData(numAuthorsData, numAuthors)
+setLineData(numFilesData, numFiles)
 
 screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);

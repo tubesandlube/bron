@@ -74,6 +74,35 @@ func countAuthors(repoPath string) int {
 
 }
 
+func countAuthorsByCommits(repoPath string, commit string) int {
+
+	counts := map[string]int{}
+	commits, commitMap := getCommits(repoPath)
+	index := -1
+	for i, c := range commits {
+		if strings.EqualFold(commit, c) {
+			index = i
+		}
+	}
+	if index != -1 {
+		commits = commits[index:]
+	}
+	for k, commit := range commitMap {
+		for _, c := range commits {
+			if c == k {
+				if _, ok := counts[commit["author"]]; ok {
+					counts[commit["author"]] = counts[commit["author"]]+1
+				} else {
+					counts[commit["author"]] = 1
+				}
+			}
+		}
+	}
+
+	return len(counts)
+
+}
+
 func countAuthorCommits(repoPath string) map[string]int {
 
 	counts := map[string]int{}
@@ -92,7 +121,7 @@ func countAuthorCommits(repoPath string) map[string]int {
 
 func countAuthorLines(repoPath string) map[string]int {
 
-	// XXX stub
+	// XXX stub, requires reading diffs
 	counts := map[string]int{}
 
 	return counts

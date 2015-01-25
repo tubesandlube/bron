@@ -3,10 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
-	"os/exec"
-	"strconv"
-	"syscall"
 
 	"github.com/mgutz/ansi"
 
@@ -16,6 +12,7 @@ import (
 var (
 	blessedPtr   string
 	dashboardPtr string
+	forcePtr     bool
 	repoPtr      string
 	repoPathPtr  string
 	verbosePtr   int
@@ -41,10 +38,11 @@ func main() {
 
 	flag.StringVar(&blessedPtr, "blessedPath", "/go/src/github.com/yaronn/blessed-contrib", "Path where blessed-contrib is installed")
 	flag.StringVar(&dashboardPtr, "dashboard", "example", "Name of dashboard to use for visualization")
-	flag.StringVar(&repoPtr, "repo", "", "Git repository to scan")
-	flag.StringVar(&repoPathPtr, "path", "", "Git repository file path to scan")
+	flag.StringVar(&repoPtr, "repo", "github.com/gophergala/bron", "Git repository to scan")
+	flag.StringVar(&repoPathPtr, "path", "", "Git repository file path to scan (not currently implemented)")
 	flag.IntVar(&verbosePtr, "v", 1, "verbosity level")
 	flag.BoolVar(&vizPtr, "viz", false, "Visualize the results, requires blessed")
+	flag.BoolVar(&forcePtr, "f", false, "Force update the data")
 
 	flag.Parse()
 
@@ -58,39 +56,12 @@ func main() {
 		}
 	}
 
-	// XXX testing
 	if repoPtr != "" {
-		uuidRepo := cloneRepo(repoPtr)
-
-		// XXX temp code to show that the clone worked
-		lsCmd := exec.Command("ls", "-a", "-l", uuidRepo)
-		lsOut, lsCmdErr := lsCmd.Output()
-		check(lsCmdErr)
-		fmt.Println(string(lsOut))
-
-		// XXX example calls
-		t := getFiles(uuidRepo)
-		fmt.Println(t)
-
-		// XXX example calls
-		u := getFileContents(t[0])
-		fmt.Println(string(u))
-
-		// XXX example calls
-		fmt.Println(countFiles(uuidRepo))
-		fmt.Println(countLanguages(uuidRepo))
-
-		// XXX example calls
-		x, v := getCommits(uuidRepo)
-		fmt.Println(x)
-		fmt.Println(v)
-		fmt.Println(x[0])
-		fmt.Println(x[1])
-		y := getDiff(uuidRepo, x[0], x[1])
-		fmt.Print(string(y))
-		fmt.Println("number of commits:", countCommits(uuidRepo))
+		clonePath := "https://"+repoPtr+".git"
+		uuidRepo := cloneRepo(clonePath)
 
 		// XXX example calls through all commits
+		x, _ := getCommits(uuidRepo)
 		for _, commit := range x {
 			checkoutCommit(uuidRepo, commit)
 			fmt.Println("number of files:", countFiles(uuidRepo))
@@ -119,40 +90,15 @@ func main() {
 		fmt.Println(templates)
 
 		if vizPtr {
-			chErr := os.Chdir(blessedPtr)
-			check(chErr)
-
-			// get data for dashboard
-			languages := "["
-			languageLines := "["
-			languageMap := countLinesPerLanguage(uuidRepo)
-			for key := range languageMap {
-				languages += "'"+key+"', "
-				languageLines += "'"+strconv.Itoa(languageMap[key])+"', "
+			if !forcePtr {
+				if checkData(repoPtr) {
+					showDashboard()
+				} else {
+					updateDashboardData(uuidRepo, repoPtr)
+				}
+			} else {
+				updateDashboardData(uuidRepo, repoPtr)
 			}
-			languages = languages[0:len(languages)-2]+"]"
-			languageLines = languageLines[0:len(languageLines)-2]+"]"
-
-			//for _, commit := range x {
-			//	checkoutCommit(uuidRepo, commit)
-			//}
-
-			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "languages", languages)
-			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "languageLines", languageLines)
-
-			// XXX fill in '[]' with real data
-			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "authors", "[['','']]")
-			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numLanguagesData", "{x:[''],y:['']}")
-			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numLinesData", "{x:[''],y:['']}")
-			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numAuthorsData", "{x:[''],y:['']}")
-			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numFilesData", "{x:[''],y:['']}")
-
-			binary, lookErr := exec.LookPath("node")
-			check(lookErr)
-			args := []string{"node", "./dashboards/"+dashboardPtr+"/dashboard.js"}
-			env := os.Environ()
-			execErr := syscall.Exec(binary, args, env)
-			check(execErr)
 		}
 	}
 
