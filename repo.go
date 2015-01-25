@@ -72,7 +72,20 @@ func getFiles(repoPath string) []string {
 			continue
 		}
 		if !strings.Contains(walker.Path(), ".git") && strings.Contains(walker.Path(), ".") {
-			files = append(files, walker.Path())
+			name := walker.Path()
+			f, err := os.Open(name)
+			if err == nil {
+				defer f.Close()
+				fi, err := f.Stat()
+				if err == nil {
+					switch mode := fi.Mode(); {
+					case mode.IsDir():
+						continue
+					case mode.IsRegular():
+						files = append(files, walker.Path())
+					}
+				}
+			}
 		}
 	}
 
