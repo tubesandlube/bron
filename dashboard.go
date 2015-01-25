@@ -116,8 +116,8 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string) {
 
 	x, y := getCommits(uuidRepo)
 	// XXX x needs to be reversed, note don't simply sort and reverse, order matters
-	for _, commit := range x {
-		checkoutCommit(uuidRepo, commit)
+	for i := len(x)-1; i >= 0; i-- {
+		checkoutCommit(uuidRepo, x[i])
 
 		lineCount := 0
 		files := getFiles(uuidRepo)
@@ -130,13 +130,13 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string) {
 			languageCount += langMap[key]
 		}
 
-		numLanguagesDataX += "'"+y[commit]["timestamp"]+"', "
+		numLanguagesDataX += "'"+y[x[i]]["timestamp"]+"', "
 		numLanguagesDataY += "'"+strconv.Itoa(languageCount)+"', "
-		numLinesDataX += "'"+y[commit]["timestamp"]+"', "
+		numLinesDataX += "'"+y[x[i]]["timestamp"]+"', "
 		numLinesDataY += "'"+strconv.Itoa(lineCount)+"', "
-		numAuthorsDataX += "'"+y[commit]["timestamp"]+"', "
-		numAuthorsDataY += "'"+strconv.Itoa(countAuthorsByCommits(uuidRepo, commit))+"', "
-		numFilesDataX += "'"+y[commit]["timestamp"]+"', "
+		numAuthorsDataX += "'"+y[x[i]]["timestamp"]+"', "
+		numAuthorsDataY += "'"+strconv.Itoa(countAuthorsByCommits(uuidRepo, x[i]))+"', "
+		numFilesDataX += "'"+y[x[i]]["timestamp"]+"', "
 		numFilesDataY += "'"+strconv.Itoa(countFiles(uuidRepo))+"', "
 	}
 	checkoutCommit(uuidRepo, x[0])
