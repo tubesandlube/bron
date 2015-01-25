@@ -105,6 +105,16 @@ func main() {
 		if vizPtr {
 			chErr := os.Chdir(blessedPtr)
 			check(chErr)
+
+			// XXX fill in '[]' with real data
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "languages", "['']")
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "languageLines", "['']")
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "authors", "[['','']]")
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numLanguagesData", "{x:[''],y:['']}")
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numLinesData", "{x:[''],y:['']}")
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numAuthorsData", "{x:[''],y:['']}")
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numFilesData", "{x:[''],y:['']}")
+
 			binary, lookErr := exec.LookPath("node")
 			check(lookErr)
 			args := []string{"node", "./dashboards/"+dashboardPtr+"/dashboard.js"}
