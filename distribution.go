@@ -7,6 +7,11 @@ import (
 
 )
 
+//func filterDistribution(contentFile string, wg *sync.WaitGroup) map[string]int {
+//func filterDistribution(contentFile string, c chan string, wg *sync.WaitGroup) {
+//func filterDistribution(contentFile string, c chan string) {
+//func filterDistribution(contentFile string, in <-chan *string, out chan<- *string) {
+
 func filterDistribution(contentFile string) map[string]int {
 
 	counts := map[string]int{}
@@ -16,16 +21,14 @@ func filterDistribution(contentFile string) map[string]int {
 // strip white space and count
 // count remainder
 
-//	coder, _ := regexp.Compile("^[^\\s]
+	//coder, _ := regexp.Compile("^[^\\s]
 
 	file, err := ioutil.ReadFile(contentFile)
 	check(err)
 	fmt.Println("found", len(file), "characters in file", contentFile)
-	//string(file)
 
 	counts["loc"] = len(file)
 
-	
 	return counts
 
 }

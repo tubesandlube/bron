@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"syscall"
 
+	"github.com/mgutz/ansi"
+
 //	"github.com/gophergala/bron/filters"
 )
 
@@ -24,6 +26,15 @@ func check(e error) {
 	if e != nil {
 		panic(e)
 	}
+}
+
+func colorize(msg string) string {
+
+	lime  := ansi.ColorCode("green+h:black")
+	reset := ansi.ColorCode("reset")
+
+	return(lime + msg + reset)
+
 }
 
 func main() {
@@ -82,7 +93,7 @@ func main() {
 		// XXX example calls through all commits
 		for _, commit := range x {
 			checkoutCommit(uuidRepo, commit)
-			fmt.Println("number of files;", countFiles(uuidRepo))
+			fmt.Println("number of files:", countFiles(uuidRepo))
 			fmt.Println("langs by files:", countLanguages(uuidRepo))
 			files := getFiles(uuidRepo)
 			for _, file := range files {
@@ -91,13 +102,16 @@ func main() {
 			fmt.Println("number of lines:", countLinesPerLanguage(uuidRepo))
 
 			// XXX simple channel starts, for now
+			fmt.Println("started parsing...")
 			parse(files)
+			fmt.Println("finished parsing")
 
 		}
 		checkoutCommit(uuidRepo, x[0])
 		z := countAuthorCommits(uuidRepo)
 		fmt.Println(z)
 		s := countAuthors(uuidRepo)
+		//fmt.Println(colorize(string(s)))
 		fmt.Println(s)
 
 		// XXX test template parsing
