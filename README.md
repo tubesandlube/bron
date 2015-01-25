@@ -46,7 +46,7 @@ cp -R dashboards ../../yaronn/blessed-contrib/
 
 Note, the Docker image (from the Hub or from source) will already include all of the above mentioned dependencies, so you can skip those steps.
 
-Get it from the [Docker Hub](https://registry.hub.docker.com/u/tubesandlube/bron/):
+Get it from the [Docker Hub](https://registry.hub.docker.com/u/tubesandlube/bron/dockerfile/):
 
 ```
 docker pull tubesandlube/bron
