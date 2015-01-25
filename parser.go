@@ -9,9 +9,11 @@ import (
 
 )
 
+// XXX fix extensions to handle more than one
+
 type Template struct {
 	Name string
-	Extensions []string
+	Extensions string
 	Structures map[string]string
 	Types map[string]string
 	Names map[string]string
@@ -56,6 +58,7 @@ func templateLoad(templateFile string) *Template {
 
 	t := new(Template)
 	t.Name = templateFile
+	section := "unknown"
 
 	sectionr, _ := regexp.Compile("^[\\w\\s]+\\:$")
 	cleanr, _   := regexp.Compile("^\\s*")
@@ -68,7 +71,7 @@ func templateLoad(templateFile string) *Template {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		if(sectionr.MatchString(scanner.Text())) {
-			section := scanner.Text()[:len(scanner.Text())-1]
+			section = scanner.Text()[:len(scanner.Text())-1]
 			fmt.Println("found section", section, "from file", templateFile)
 		} else {
 			parts := regexp.MustCompile(": ").Split(scanner.Text(), 2)
@@ -77,7 +80,15 @@ func templateLoad(templateFile string) *Template {
 				fmt.Println("adding content match", parts[1], "to param", param)
 			} else {
 				if(len(param) > 0) {
-					fmt.Println("adding single param", param)
+					fmt.Println("adding single param", param, "to section", section)
+					// XXX literal issue here, ugly
+					if section == "extensions"  {
+						t.Extensions = param
+					}
+//					s := t.section
+//					s.param = param
+////t.section[param] = param
+//t{section: param}
 				} else {
 					//fmt.Println("skipping blank line", param)
 				}
