@@ -14,7 +14,7 @@ var (
 	forcePtr     bool
 	repoPtr      string
 	repoPathPtr  string
-	verbosePtr   int
+	verbosePtr   bool
 	vizPtr       bool
 )
 
@@ -39,7 +39,7 @@ func main() {
 	flag.StringVar(&dashboardPtr, "dashboard", "example", "Name of dashboard to use for visualization")
 	flag.StringVar(&repoPtr, "repo", "github.com/gophergala/bron", "Git repository to scan")
 	flag.StringVar(&repoPathPtr, "path", "", "Git repository file path to scan (not currently implemented)")
-	flag.IntVar(&verbosePtr, "v", 1, "verbosity level")
+	flag.BoolVar(&verbosePtr, "v", false, "verbosity level")
 	flag.BoolVar(&vizPtr, "viz", false, "Visualize the results, requires blessed")
 	flag.BoolVar(&forcePtr, "f", false, "Force update the data")
 
@@ -50,7 +50,7 @@ func main() {
 	} else if repoPtr != "" && repoPathPtr != "" {
 		fmt.Println("please specify only either a repo or a path to a git repo to scan, not both")
 	} else {
-		if verbosePtr > 0 {
+		if verbosePtr {
 			fmt.Println("going to scan repository", repoPtr, "...")
 		}
 	}
@@ -75,16 +75,16 @@ func main() {
 
 		if vizPtr {
 			if !forcePtr {
-				if checkData(repoPtr) {
-					if verbosePtr > 0 {
+				if checkData(repoPtr, dashboardPtr, blessedPtr) {
+					if verbosePtr {
 						fmt.Println("found existing data for", repoPtr, "using that ...")
 					}
 					showDashboard()
 				} else {
-					updateDashboardData(uuidRepo, repoPtr)
+					updateDashboardData(uuidRepo, repoPtr, dashboardPtr)
 				}
 			} else {
-				updateDashboardData(uuidRepo, repoPtr)
+				updateDashboardData(uuidRepo, repoPtr, dashboardPtr)
 			}
 		}
 	}

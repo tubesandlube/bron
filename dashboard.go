@@ -9,20 +9,45 @@ import (
 	"syscall"
 )
 
-func checkData(repoName string) bool {
+func checkData(repoName string, dashboard string, blessed string) bool {
 
-	// XXX stub
+	data, err := ioutil.ReadFile("db/"+repoName+"/"+dashboard+".data")
+	if err != nil {
+		return false
+	}
+	lines := strings.Split(string(data), "\n")
 
-	return false
+	chErr := os.Chdir(blessed)
+	if chErr != nil {
+		return false
+	}
+	for _, line := range lines {
+		if line != "\n" && line != "" {
+			dt := strings.Split(line, "|")
+			if len(dt) < 2 {
+				return false
+			}
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", dt[0], dt[1])
+		}
+	}
+
+	return true
 
 }
 
-func saveData(repoName string, vals ...string) {
+func saveData(repoName string, dashboard string, vals ...string) {
 
 	err := os.MkdirAll("db/"+repoName, 0644)
 	check(err)
 
-	// XXX stub
+	data := ""
+	for _, val := range vals {
+		data += val+"\n"
+	}
+	d1 := []byte(data)
+
+	err = ioutil.WriteFile("db/"+repoName+"/"+dashboard+".data", d1, 0644)
+	check(err)
 
 }
 
@@ -73,7 +98,7 @@ func barChartData(bars map[string]int) (string, string) {
 
 }
 
-func updateDashboardData(uuidRepo string, repoPtr string) {
+func updateDashboardData(uuidRepo string, repoPtr string, dashboard string) {
 
 	// get data for dashboard
 	languages, languageLines := barChartData(countLinesPerLanguage(uuidRepo))
@@ -121,7 +146,7 @@ func updateDashboardData(uuidRepo string, repoPtr string) {
 	numAuthorsData := "{"+numAuthorsDataX[0:len(numAuthorsDataX)-2]+"], "+numAuthorsDataY[0:len(numAuthorsDataY)-2]+"]"+"}"
 	numFilesData := "{"+numFilesDataX[0:len(numFilesDataX)-2]+"], "+numFilesDataY[0:len(numFilesDataY)-2]+"]"+"}"
 
-	saveData(repoPtr, "languages|"+languages, "languageLines|"+languageLines, "authors|"+authors, "numLanguagesData|"+numLanguagesData, "numLinesData|"+numLinesData, "numAuthorsData|"+numAuthorsData, "numFilesData|"+numFilesData)
+	saveData(repoPtr, dashboard, "languages|"+languages, "languageLines|"+languageLines, "authors|"+authors, "numLanguagesData|"+numLanguagesData, "numLinesData|"+numLinesData, "numAuthorsData|"+numAuthorsData, "numFilesData|"+numFilesData)
 
 	chErr := os.Chdir(blessedPtr)
 	check(chErr)
