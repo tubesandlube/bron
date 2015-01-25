@@ -142,7 +142,7 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verb
 	languages, languageLines := barChartData(sortMap(countLinesPerLanguage(uuidRepo)))
 	if (!quietPtr && verbosePtr) || statusPtr {
 		fmt.Printf("\rprocessing languages ... done.\n")
-		fmt.Println("\rprocessing authors ...")
+		fmt.Printf("\rprocessing authors ...")
 	}
 	authors := tableData(sortMap(countAuthorCommits(uuidRepo)))
 	if (!quietPtr && verbosePtr) || statusPtr {
