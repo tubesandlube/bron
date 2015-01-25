@@ -96,9 +96,8 @@ func checkoutCommit(repoPath string, commit string) {
 	chErr := os.Chdir(repoPath)
 	check(chErr)
 	checkoutCmd := exec.Command("git", "checkout", commit)
-	checkoutOut, checkoutErr := checkoutCmd.Output()
+	_, checkoutErr := checkoutCmd.Output()
 	check(checkoutErr)
-	fmt.Println(string(checkoutOut))
 	chErr = os.Chdir(cwd)
 	check(chErr)
 

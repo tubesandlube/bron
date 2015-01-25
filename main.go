@@ -83,30 +83,56 @@ func main() {
 			}
 			authors = authors[0:len(authors)-2]+"]"
 
-			x, _ := getCommits(uuidRepo)
+			numLanguagesDataX := "x:["
+			numLanguagesDataY := "y:["
+			numLinesDataX := "x:["
+			numLinesDataY := "y:["
+			numAuthorsDataX := "x:["
+			numAuthorsDataY := "y:["
+			numFilesDataX := "x:["
+			numFilesDataY := "y:["
+
+			x, y := getCommits(uuidRepo)
+			// XXX x needs to be reversed, note don't simply sort and reverse, order matters
 			for _, commit := range x {
 				checkoutCommit(uuidRepo, commit)
-				fmt.Println("number of authors:", countAuthorsByCommits(uuidRepo, commit))
-				fmt.Println("number of files;", countFiles(uuidRepo))
-				fmt.Println("langs by files:", countLanguages(uuidRepo))
+
+				lineCount := 0
 				files := getFiles(uuidRepo)
 				for _, file := range files {
-					fmt.Println("File:", file, ":", countLines(file))
+					lineCount += countLines(file)
 				}
+				languageCount := 0
+				langMap := countLanguages(uuidRepo)
+				for key := range langMap {
+					languageCount += langMap[key]
+				}
+
+				numLanguagesDataX += "'"+y[commit]["timestamp"]+"', "
+				numLanguagesDataY += "'"+strconv.Itoa(languageCount)+"', "
+				numLinesDataX += "'"+y[commit]["timestamp"]+"', "
+				numLinesDataY += "'"+strconv.Itoa(lineCount)+"', "
+				numAuthorsDataX += "'"+y[commit]["timestamp"]+"', "
+				numAuthorsDataY += "'"+strconv.Itoa(countAuthorsByCommits(uuidRepo, commit))+"', "
+				numFilesDataX += "'"+y[commit]["timestamp"]+"', "
+				numFilesDataY += "'"+strconv.Itoa(countFiles(uuidRepo))+"', "
 			}
 			checkoutCommit(uuidRepo, x[0])
+
+			numLanguagesData := "{"+numLanguagesDataX[0:len(numLanguagesDataX)-2]+"], "+numLanguagesDataY[0:len(numLanguagesDataY)-2]+"]"+"}"
+			numLinesData := "{"+numLinesDataX[0:len(numLinesDataX)-2]+"], "+numLinesDataY[0:len(numLinesDataY)-2]+"]"+"}"
+			numAuthorsData := "{"+numAuthorsDataX[0:len(numAuthorsDataX)-2]+"], "+numAuthorsDataY[0:len(numAuthorsDataY)-2]+"]"+"}"
+			numFilesData := "{"+numFilesDataX[0:len(numFilesDataX)-2]+"], "+numFilesDataY[0:len(numFilesDataY)-2]+"]"+"}"
 
 			chErr := os.Chdir(blessedPtr)
 			check(chErr)
 			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "languages", languages)
 			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "languageLines", languageLines)
 			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "authors", authors)
-
-			// XXX fill in '[]' with real data
-			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numLanguagesData", "{x:[''],y:['']}")
-			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numLinesData", "{x:[''],y:['']}")
-			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numAuthorsData", "{x:[''],y:['']}")
-			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numFilesData", "{x:[''],y:['']}")
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numLanguagesData", numLanguagesData)
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numLinesData", numLinesData)
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numAuthorsData", numAuthorsData)
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numFilesData", numFilesData)
 
 			binary, lookErr := exec.LookPath("node")
 			check(lookErr)
