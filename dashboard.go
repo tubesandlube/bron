@@ -74,7 +74,7 @@ func tableData(rows map[string]int) string {
 	table := "["
 
 	for key := range rows {
-		table += "['"+key+"', '"+strconv.Itoa(rows[key])+"'], "
+		table += "['"+strings.Replace(key, "'", "\\'", -1)+"', '"+strconv.Itoa(rows[key])+"'], "
 	}
 	table = table[0:len(table)-2]+"]"
 
@@ -88,7 +88,7 @@ func barChartData(bars map[string]int) (string, string) {
 	y := "["
 
 	for key := range bars {
-		x += "'"+key+"', "
+		x += "'"+strings.Replace(key, "'", "\\'", -1)+"', "
 		y += "'"+strconv.Itoa(bars[key])+"', "
 	}
 	x = x[0:len(x)-2]+"]"
