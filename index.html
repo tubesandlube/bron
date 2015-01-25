@@ -47,6 +47,23 @@
 <pre><code>git
 </code></pre>
 
+<p>If using the <code>-viz</code> option, you'll need to have <a href="https://github.com/yaronn/blessed-contrib">blessed-contrib</a> installed.  <code>bron</code> expects the <code>blessed-contrib</code> src directory to be a cousin to the <code>bron</code> src directory.</p>
+
+<p>For example if your <code>bron</code> src directory is located at:</p>
+
+<pre><code>/go/src/github.com/gophergala/bron
+</code></pre>
+
+<p>Then your <code>blessed-contrib</code> src directory should be located somewhere like this:</p>
+
+<pre><code>/go/src/github.com/yaronn/blessed-contrib
+</code></pre>
+
+<p>After installing <code>blessed-contrib</code> be sure and copy over the dashboards directory from <code>bron</code> like so:</p>
+
+<pre><code>cp -R dashboards ../../yaronn/blessed-contrib/
+</code></pre>
+
 <h2>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
 
@@ -57,6 +74,8 @@
 
 <h4>
 <a id="run-on-docker" class="anchor" href="#run-on-docker" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run on Docker:</h4>
+
+<p>Note, the Docker image (from the Hub or from source) will already include all of the above mentioned dependencies, so you can skip those steps.</p>
 
 <p>Get it from the Docker Hub:</p>
 
@@ -76,6 +95,13 @@ docker run -it bron -h
 <a id="install-using-go" class="anchor" href="#install-using-go" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install using Go:</h4>
 
 <pre><code>go get github.com/gophergala/bron
+bron -h
+</code></pre>
+
+<h4>
+<a id="using-docker-volumes-to-persist-results" class="anchor" href="#using-docker-volumes-to-persist-results" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using Docker Volumes to Persist Results</h4>
+
+<pre><code>docker run -it -v /home/go/src/github/gophergala/bron/db:/go/src/github.com/gophergala/bron/db bron -viz
 </code></pre>
       </section>
 
