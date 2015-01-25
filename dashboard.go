@@ -9,6 +9,20 @@ import (
 	"syscall"
 )
 
+func checkData(repoName string) bool {
+
+	// XXX stub
+
+	return false
+
+}
+
+func saveData(repoName string, vals ...string) {
+
+	// XXX stub
+
+}
+
 func updateData(filename string, varName string, data string) {
 
 	input, err := ioutil.ReadFile(filename)
@@ -56,7 +70,7 @@ func barChartData(bars map[string]int) (string, string) {
 
 }
 
-func updateDashboardData(uuidRepo string) {
+func updateDashboardData(uuidRepo string, repoPtr string) {
 
 	// get data for dashboard
 	languages, languageLines := barChartData(countLinesPerLanguage(uuidRepo))
@@ -104,6 +118,8 @@ func updateDashboardData(uuidRepo string) {
 	numAuthorsData := "{"+numAuthorsDataX[0:len(numAuthorsDataX)-2]+"], "+numAuthorsDataY[0:len(numAuthorsDataY)-2]+"]"+"}"
 	numFilesData := "{"+numFilesDataX[0:len(numFilesDataX)-2]+"], "+numFilesDataY[0:len(numFilesDataY)-2]+"]"+"}"
 
+	saveData(repoPtr, languages, languageLines, authors, numLanguagesData, numLinesData, numAuthorsData, numFilesData)
+
 	chErr := os.Chdir(blessedPtr)
 	check(chErr)
 	updateData("dashboards/"+dashboardPtr+"/dashboard.js", "languages", languages)
@@ -114,6 +130,19 @@ func updateDashboardData(uuidRepo string) {
 	updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numAuthorsData", numAuthorsData)
 	updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numFilesData", numFilesData)
 
+	binary, lookErr := exec.LookPath("node")
+	check(lookErr)
+	args := []string{"node", "./dashboards/"+dashboardPtr+"/dashboard.js"}
+	env := os.Environ()
+	execErr := syscall.Exec(binary, args, env)
+	check(execErr)
+
+}
+
+func showDashboard() {
+
+	chErr := os.Chdir(blessedPtr)
+	check(chErr)
 	binary, lookErr := exec.LookPath("node")
 	check(lookErr)
 	args := []string{"node", "./dashboards/"+dashboardPtr+"/dashboard.js"}

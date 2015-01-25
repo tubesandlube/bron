@@ -10,6 +10,7 @@ import (
 var (
 	blessedPtr   string
 	dashboardPtr string
+	forcePtr     bool
 	repoPtr      string
 	repoPathPtr  string
 	verbosePtr   int
@@ -26,10 +27,11 @@ func main() {
 
 	flag.StringVar(&blessedPtr, "blessedPath", "/go/src/github.com/yaronn/blessed-contrib", "Path where blessed-contrib is installed")
 	flag.StringVar(&dashboardPtr, "dashboard", "example", "Name of dashboard to use for visualization")
-	flag.StringVar(&repoPtr, "repo", "", "Git repository to scan")
-	flag.StringVar(&repoPathPtr, "path", "", "Git repository file path to scan")
+	flag.StringVar(&repoPtr, "repo", "github.com/gophergala/bron", "Git repository to scan")
+	flag.StringVar(&repoPathPtr, "path", "", "Git repository file path to scan (not currently implemented)")
 	flag.IntVar(&verbosePtr, "v", 1, "verbosity level")
 	flag.BoolVar(&vizPtr, "viz", false, "Visualize the results, requires blessed")
+	flag.BoolVar(&forcePtr, "f", false, "Force update the data")
 
 	flag.Parse()
 
@@ -44,7 +46,8 @@ func main() {
 	}
 
 	if repoPtr != "" {
-		uuidRepo := cloneRepo(repoPtr)
+		clonePath := "https://"+repoPtr+".git"
+		uuidRepo := cloneRepo(clonePath)
 
 		// XXX example calls through all commits
 		x, _ := getCommits(uuidRepo)
@@ -61,7 +64,15 @@ func main() {
 		fmt.Println(templates)
 
 		if vizPtr {
-			updateDashboardData(uuidRepo)
+			if !forcePtr {
+				if checkData(repoPtr) {
+					showDashboard()
+				} else {
+					updateDashboardData(uuidRepo, repoPtr)
+				}
+			} else {
+				updateDashboardData(uuidRepo, repoPtr)
+			}
 		}
 	}
 
