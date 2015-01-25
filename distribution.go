@@ -11,10 +11,15 @@ func filterDistribution(templates map[string]*Template, contentFile string) map[
 
 	counts := map[string]int{}
 
-	language := determineLanguage(templates, contentFile)
+	language, t := determineLanguage(templates, contentFile)
 
 	if language != "unknown" {
 		fmt.Println("language determined as", language)
+
+		// XXX multi-line is not accurate
+		// XXX counting lines that have comments but also code, as code only
+		commentMarkers := t.Comments
+		fmt.Printf("whole thing, commentMarkers, %v", commentMarkers)
 	} else {
 		fmt.Println("skipping loc filtering for", contentFile, " due to not being able to determine language.")
 	}

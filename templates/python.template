@@ -17,8 +17,7 @@ names:
 	variables: $variable =
 	functions: def $name
 	function calls: $name()
-	comments: # $comment
-	comments: """$comment"""
+	comments: # $comment|"""$comment"""
 
 keywords:
 	and: and

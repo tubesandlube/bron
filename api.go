@@ -33,7 +33,7 @@ func countLanguages(repoPath string) map[string]int {
 
 }
 
-func determineLanguage(templates map[string]*Template, file string) string {
+func determineLanguage(templates map[string]*Template, file string) (string, *Template) {
 
 	fmt.Println("checking language type for file", file)
 
@@ -47,10 +47,11 @@ func determineLanguage(templates map[string]*Template, file string) string {
 		if ext == e {
 			fmt.Println("found match...")
 			language = t.Name
+			return language, t
 		}
 	}
 
-	return language
+	return language, nil
 
 }
 

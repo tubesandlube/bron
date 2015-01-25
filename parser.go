@@ -17,6 +17,7 @@ type Template struct {
 	Structures map[string]string
 	Types map[string]string
 	Names map[string]string
+	Comments string
 	Keywords map[string]string
 	Expressions map[string]string
 	Libraries map[string]string
@@ -80,11 +81,19 @@ func templateLoad(templateFile string) *Template {
 			param := cleanr.ReplaceAllString(parts[0], "")
 			if(len(parts) > 1) {
 				fmt.Println("adding content match", parts[1], "to param", param)
+				// XXX literal issue
+				if section == "names" {
+					fmt.Println(colorize("found names section"))
+					if param == "comments" {
+						fmt.Println("found comments section(s)", parts[1])
+						t.Comments = parts[1]
+					}
+				}
 			} else {
 				if(len(param) > 0) {
 					fmt.Println("adding single param", param, "to section", section)
 					// XXX literal issue here, ugly
-					if section == "extensions"  {
+					if section == "extensions" {
 						t.Extensions = param
 					}
 				} else {
