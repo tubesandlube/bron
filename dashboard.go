@@ -9,20 +9,45 @@ import (
 	"syscall"
 )
 
-func checkData(repoName string) bool {
+func checkData(repoName string, dashboard string, blessed string) bool {
 
-	// XXX stub
+	data, err := ioutil.ReadFile("db/"+repoName+"/"+dashboard+".data")
+	if err != nil {
+		return false
+	}
+	lines := strings.Split(string(data), "\n")
 
-	return false
+	chErr := os.Chdir(blessed)
+	if chErr != nil {
+		return false
+	}
+	for _, line := range lines {
+		if line != "\n" && line != "" {
+			dt := strings.Split(line, "|")
+			if len(dt) < 2 {
+				return false
+			}
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", dt[0], dt[1])
+		}
+	}
+
+	return true
 
 }
 
-func saveData(repoName string, vals ...string) {
+func saveData(repoName string, dashboard string, vals ...string) {
 
 	err := os.MkdirAll("db/"+repoName, 0644)
 	check(err)
 
-	// XXX stub
+	data := ""
+	for _, val := range vals {
+		data += val+"\n"
+	}
+	d1 := []byte(data)
+
+	err = ioutil.WriteFile("db/"+repoName+"/"+dashboard+".data", d1, 0644)
+	check(err)
 
 }
 
@@ -49,7 +74,7 @@ func tableData(rows map[string]int) string {
 	table := "["
 
 	for key := range rows {
-		table += "['"+key+"', '"+strconv.Itoa(rows[key])+"'], "
+		table += "['"+strings.Replace(key, "'", "\\'", -1)+"', '"+strconv.Itoa(rows[key])+"'], "
 	}
 	table = table[0:len(table)-2]+"]"
 
@@ -63,7 +88,7 @@ func barChartData(bars map[string]int) (string, string) {
 	y := "["
 
 	for key := range bars {
-		x += "'"+key+"', "
+		x += "'"+strings.Replace(key, "'", "\\'", -1)+"', "
 		y += "'"+strconv.Itoa(bars[key])+"', "
 	}
 	x = x[0:len(x)-2]+"]"
@@ -73,7 +98,7 @@ func barChartData(bars map[string]int) (string, string) {
 
 }
 
-func updateDashboardData(uuidRepo string, repoPtr string) {
+func updateDashboardData(uuidRepo string, repoPtr string, dashboard string) {
 
 	// get data for dashboard
 	languages, languageLines := barChartData(countLinesPerLanguage(uuidRepo))
@@ -91,8 +116,8 @@ func updateDashboardData(uuidRepo string, repoPtr string) {
 
 	x, y := getCommits(uuidRepo)
 	// XXX x needs to be reversed, note don't simply sort and reverse, order matters
-	for _, commit := range x {
-		checkoutCommit(uuidRepo, commit)
+	for i := len(x)-1; i >= 0; i-- {
+		checkoutCommit(uuidRepo, x[i])
 
 		lineCount := 0
 		files := getFiles(uuidRepo)
@@ -105,13 +130,13 @@ func updateDashboardData(uuidRepo string, repoPtr string) {
 			languageCount += langMap[key]
 		}
 
-		numLanguagesDataX += "'"+y[commit]["timestamp"]+"', "
+		numLanguagesDataX += "'"+y[x[i]]["timestamp"]+"', "
 		numLanguagesDataY += "'"+strconv.Itoa(languageCount)+"', "
-		numLinesDataX += "'"+y[commit]["timestamp"]+"', "
+		numLinesDataX += "'"+y[x[i]]["timestamp"]+"', "
 		numLinesDataY += "'"+strconv.Itoa(lineCount)+"', "
-		numAuthorsDataX += "'"+y[commit]["timestamp"]+"', "
-		numAuthorsDataY += "'"+strconv.Itoa(countAuthorsByCommits(uuidRepo, commit))+"', "
-		numFilesDataX += "'"+y[commit]["timestamp"]+"', "
+		numAuthorsDataX += "'"+y[x[i]]["timestamp"]+"', "
+		numAuthorsDataY += "'"+strconv.Itoa(countAuthorsByCommits(uuidRepo, x[i]))+"', "
+		numFilesDataX += "'"+y[x[i]]["timestamp"]+"', "
 		numFilesDataY += "'"+strconv.Itoa(countFiles(uuidRepo))+"', "
 	}
 	checkoutCommit(uuidRepo, x[0])
@@ -121,7 +146,7 @@ func updateDashboardData(uuidRepo string, repoPtr string) {
 	numAuthorsData := "{"+numAuthorsDataX[0:len(numAuthorsDataX)-2]+"], "+numAuthorsDataY[0:len(numAuthorsDataY)-2]+"]"+"}"
 	numFilesData := "{"+numFilesDataX[0:len(numFilesDataX)-2]+"], "+numFilesDataY[0:len(numFilesDataY)-2]+"]"+"}"
 
-	saveData(repoPtr, "languages|"+languages, "languageLines|"+languageLines, "authors|"+authors, "numLanguagesData|"+numLanguagesData, "numLinesData|"+numLinesData, "numAuthorsData|"+numAuthorsData, "numFilesData|"+numFilesData)
+	saveData(repoPtr, dashboard, "languages|"+languages, "languageLines|"+languageLines, "authors|"+authors, "numLanguagesData|"+numLanguagesData, "numLinesData|"+numLinesData, "numAuthorsData|"+numAuthorsData, "numFilesData|"+numFilesData)
 
 	chErr := os.Chdir(blessedPtr)
 	check(chErr)
