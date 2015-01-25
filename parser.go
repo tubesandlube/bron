@@ -23,7 +23,7 @@ type Template struct {
 	Libraries map[string]string
 }
 
-func templateParse(templatePath string) map[string]*Template {
+func templateParse(templatePath string, verbosePtr bool, quietPtr bool, statusPtr bool) map[string]*Template {
 
 	count := 0
 
@@ -35,18 +35,22 @@ func templateParse(templatePath string) map[string]*Template {
 		// XXX
 		if(r.MatchString(file) && ! skip.MatchString(file)) {
 			count++
-			fmt.Println("found a specific template:", file)
+			if (!quietPtr && verbosePtr) {
+				fmt.Println("found a specific template:", file)
+			}
 		}
 	}
 	// XXX fix handling count
 	templates := map[string]*Template{}
 
-	fmt.Println("found a few templates:", count)
+	if (!quietPtr && verbosePtr) {
+		fmt.Println("found a few templates:", count)
+	}
 
 	for _, file := range files {
 		// XXX
 		if(r.MatchString(file) && ! skip.MatchString(file)) {
-			t := templateLoad(file)
+			t := templateLoad(file, verbosePtr, quietPtr, statusPtr)
 			templates[t.Name] = t
 		}
 	}
@@ -55,7 +59,7 @@ func templateParse(templatePath string) map[string]*Template {
 
 }
 
-func templateLoad(templateFile string) *Template {
+func templateLoad(templateFile string, verbosePtr bool, quietPtr bool, statusPtr bool) *Template {
 
 	t := new(Template)
 	nameparts := regexp.MustCompile("[/.]").Split(templateFile, -1)
@@ -75,23 +79,33 @@ func templateLoad(templateFile string) *Template {
 	for scanner.Scan() {
 		if(sectionr.MatchString(scanner.Text())) {
 			section = scanner.Text()[:len(scanner.Text())-1]
-			fmt.Println("found section", section, "from file", templateFile)
+			if (!quietPtr && verbosePtr) {
+				fmt.Println("found section", section, "from file", templateFile)
+			}
 		} else {
 			parts := regexp.MustCompile(": ").Split(scanner.Text(), 2)
 			param := cleanr.ReplaceAllString(parts[0], "")
 			if(len(parts) > 1) {
-				fmt.Println("adding content match", parts[1], "to param", param)
+				if (!quietPtr && verbosePtr) {
+					fmt.Println("adding content match", parts[1], "to param", param)
+				}
 				// XXX literal issue
 				if section == "names" {
-					fmt.Println(colorize("found names section"))
+					if (!quietPtr && verbosePtr) {
+						fmt.Println(colorize("found names section"))
+					}
 					if param == "comments" {
-						fmt.Println("found comments section(s)", parts[1])
+						if (!quietPtr && verbosePtr) {
+							fmt.Println("found comments section(s)", parts[1])
+						}
 						t.Comments = parts[1]
 					}
 				}
 			} else {
 				if(len(param) > 0) {
-					fmt.Println("adding single param", param, "to section", section)
+					if (!quietPtr && verbosePtr) {
+						fmt.Println("adding single param", param, "to section", section)
+					}
 					// XXX literal issue here, ugly
 					if section == "extensions" {
 						t.Extensions = param

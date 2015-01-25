@@ -6,13 +6,17 @@ import (
 
 )
 
-func parse(files []string, templates map[string]*Template) {
+func parse(files []string, templates map[string]*Template, verbosePtr bool, quietPtr bool, statusPtr bool) {
 
 	for _, file := range files {
 		d := "going to parse..." + file
-		fmt.Println(colorize(d))
-		filterDistribution(templates, file)
+		if (!quietPtr && verbosePtr) {
+			fmt.Println(colorize(d))
+		}
+		filterDistribution(templates, file, verbosePtr, quietPtr, statusPtr)
 	}
-	fmt.Println("all done")
+	if (!quietPtr && verbosePtr) {
+		fmt.Println("all done")
+	}
 
 }

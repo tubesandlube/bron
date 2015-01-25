@@ -133,19 +133,19 @@ func sortMap(m map[string]int) ([]int, map[int]string) {
 
 }
 
-func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verbosePtr bool, vizPtr bool) {
+func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verbosePtr bool, vizPtr bool, quietPtr bool, statusPtr bool) {
 
 	// get data for dashboard
-	if verbosePtr {
+	if (!quietPtr && verbosePtr) || statusPtr {
 		fmt.Printf("\rprocessing languages ...")
 	}
 	languages, languageLines := barChartData(sortMap(countLinesPerLanguage(uuidRepo)))
-	if verbosePtr {
+	if (!quietPtr && verbosePtr) || statusPtr {
 		fmt.Printf("\rprocessing languages ... done.\n")
 		fmt.Println("\rprocessing authors ...")
 	}
 	authors := tableData(sortMap(countAuthorCommits(uuidRepo)))
-	if verbosePtr {
+	if (!quietPtr && verbosePtr) || statusPtr {
 		fmt.Printf("\rprocessing authors ... done.\n")
 	}
 
@@ -161,7 +161,7 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verb
 
 	x, y := getCommits(uuidRepo)
 	for i := len(x)-1; i >= 0; i-- {
-		if verbosePtr {
+		if (!quietPtr && verbosePtr) || statusPtr {
 			var percent float64
 			percent = float64(len(x))/float64(100)
 			if percent > 0 {
@@ -173,8 +173,8 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verb
 		lineCount := 0
 		files := getFiles(uuidRepo)
 
-		templates := templateParse("templates")
-		parse(files, templates)
+		templates := templateParse("templates", verbosePtr, quietPtr, statusPtr)
+		parse(files, templates, verbosePtr, quietPtr, statusPtr)
 
 		for _, file := range files {
 			lineCount += countLines(file)
@@ -194,8 +194,10 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verb
 		numFilesDataX += "'"+y[x[i]]["timestamp"]+"', "
 		numFilesDataY += "'"+strconv.Itoa(countFiles(uuidRepo))+"', "
 	}
-	fmt.Printf("\rprocessing commits ... 100.00%% complete      ")
-	fmt.Println()
+	if (!quietPtr && verbosePtr) || statusPtr {
+		fmt.Printf("\rprocessing commits ... 100.00%% complete      ")
+		fmt.Println()
+	}
 	checkoutCommit(uuidRepo, x[0])
 
 	numLanguagesData := "{"+numLanguagesDataX[0:len(numLanguagesDataX)-2]+"], "+numLanguagesDataY[0:len(numLanguagesDataY)-2]+"]"+"}"
