@@ -133,7 +133,7 @@ func sortMap(m map[string]int) ([]int, map[int]string) {
 
 }
 
-func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verbosePtr bool) {
+func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verbosePtr bool, vizPtr bool) {
 
 	// get data for dashboard
 	if verbosePtr {
@@ -172,6 +172,10 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verb
 
 		lineCount := 0
 		files := getFiles(uuidRepo)
+
+		templates := templateParse("templates")
+		parse(files, templates)
+
 		for _, file := range files {
 			lineCount += countLines(file)
 		}
@@ -201,23 +205,10 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verb
 
 	saveData(repoPtr, dashboard, "languages|"+languages, "languageLines|"+languageLines, "authors|"+authors, "numLanguagesData|"+numLanguagesData, "numLinesData|"+numLinesData, "numAuthorsData|"+numAuthorsData, "numFilesData|"+numFilesData)
 
-	chErr := os.Chdir(blessedPtr)
-	check(chErr)
-	updateData("dashboards/"+dashboardPtr+"/dashboard.js", "languages", languages)
-	updateData("dashboards/"+dashboardPtr+"/dashboard.js", "languageLines", languageLines)
-	updateData("dashboards/"+dashboardPtr+"/dashboard.js", "authors", authors)
-	updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numLanguagesData", numLanguagesData)
-	updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numLinesData", numLinesData)
-	updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numAuthorsData", numAuthorsData)
-	updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numFilesData", numFilesData)
-
-	binary, lookErr := exec.LookPath("node")
-	check(lookErr)
-	args := []string{"node", "./dashboards/"+dashboardPtr+"/dashboard.js"}
-	env := os.Environ()
-	execErr := syscall.Exec(binary, args, env)
-	check(execErr)
-
+	if vizPtr {
+		checkData(repoPtr, dashboard, blessedPtr)
+		showDashboard()
+	}
 }
 
 func showDashboard() {

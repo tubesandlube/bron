@@ -59,32 +59,19 @@ func main() {
 		clonePath := "https://"+repoPtr+".git"
 		uuidRepo := cloneRepo(clonePath)
 
-		templates := templateParse("templates")
-		//fmt.Println(templates)
-
-		// XXX example calls through all commits
-		x, _ := getCommits(uuidRepo)
-		for _, commit := range x {
-			checkoutCommit(uuidRepo, commit)
-			// XXX simple channel starts, for now
-			files := getFiles(uuidRepo)
-			parse(files, templates)
-		}
-		checkoutCommit(uuidRepo, x[0])
-
-		if vizPtr {
-			if !forcePtr {
-				if checkData(repoPtr, dashboardPtr, blessedPtr) {
-					if verbosePtr {
-						fmt.Println("found existing data for", repoPtr, "using that ...")
-					}
+		if !forcePtr {
+			if checkData(repoPtr, dashboardPtr, blessedPtr) {
+				if verbosePtr {
+					fmt.Println("found existing data for", repoPtr, "using that ...")
+				}
+				if vizPtr {
 					showDashboard()
-				} else {
-					updateDashboardData(uuidRepo, repoPtr, dashboardPtr, verbosePtr)
 				}
 			} else {
-				updateDashboardData(uuidRepo, repoPtr, dashboardPtr, verbosePtr)
+				updateDashboardData(uuidRepo, repoPtr, dashboardPtr, verbosePtr, vizPtr)
 			}
+		} else {
+			updateDashboardData(uuidRepo, repoPtr, dashboardPtr, verbosePtr, vizPtr)
 		}
 	}
 
