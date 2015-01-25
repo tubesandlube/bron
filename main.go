@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strconv"
 	"syscall"
 
 //	"github.com/gophergala/bron/filters"
@@ -93,6 +94,7 @@ func main() {
 			parse(files)
 
 		}
+		checkoutCommit(uuidRepo, x[0])
 		z := countAuthorCommits(uuidRepo)
 		fmt.Println(z)
 		s := countAuthors(uuidRepo)
@@ -106,9 +108,25 @@ func main() {
 			chErr := os.Chdir(blessedPtr)
 			check(chErr)
 
+			// get data for dashboard
+			languages := "["
+			languageLines := "["
+			languageMap := countLinesPerLanguage(uuidRepo)
+			for key := range languageMap {
+				languages += "'"+key+"', "
+				languageLines += "'"+strconv.Itoa(languageMap[key])+"', "
+			}
+			languages = languages[0:len(languages)-2]+"]"
+			languageLines = languageLines[0:len(languageLines)-2]+"]"
+
+			//for _, commit := range x {
+			//	checkoutCommit(uuidRepo, commit)
+			//}
+
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "languages", languages)
+			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "languageLines", languageLines)
+
 			// XXX fill in '[]' with real data
-			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "languages", "['']")
-			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "languageLines", "['']")
 			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "authors", "[['','']]")
 			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numLanguagesData", "{x:[''],y:['']}")
 			updateData("dashboards/"+dashboardPtr+"/dashboard.js", "numLinesData", "{x:[''],y:['']}")
