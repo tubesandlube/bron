@@ -1,7 +1,7 @@
 # bron
 
 <p align="center">
-<img src="http://beforeitsnews.com/mediadrop/uploads/2013/38/1589ea296eb82ead17d6b307601025236ec0b738.jpg">
+<img src="https://raw.githubusercontent.com/gophergala/bron/master/images/bron.jpg">
 </p>
 
 This hack was written by [@defermat](https://github.com/defermat) and [@schvin](https://github.com/schvin) as a submission in the first [Gopher Gala](http://gophergala.com/) over the weekend of 24-25 January, 2015. Please give it a whirl and let us know what you think.
@@ -9,6 +9,14 @@ This hack was written by [@defermat](https://github.com/defermat) and [@schvin](
 Analysis of large source code repositories is always interesting, especially over long periods of time. Fun and useful to see various characteristics by language, who was actively contributing in a project, or when activity peaked. After coming across [blessed](https://github.com/yaronn/blessed-contrib), we knew we had a quick way visualize the analysis with no fuss or complications.
 
 Target audience is other developers or consumers of development projects. Easy to glean more information about a project by looking at the source from a high-level viewpoint.
+
+## Visuals
+
+Screenshot of the `--viz=true` output from the [GitHub Hub repository](https://github.com/github/hub)
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/gophergala/bron/master/images/bron-github-hub-gophergala-output.png">
+</p>
 
 ## Dependencies for manual installation
 
