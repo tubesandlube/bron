@@ -80,10 +80,10 @@ func main() {
 					}
 					showDashboard()
 				} else {
-					updateDashboardData(uuidRepo, repoPtr, dashboardPtr)
+					updateDashboardData(uuidRepo, repoPtr, dashboardPtr, verbosePtr)
 				}
 			} else {
-				updateDashboardData(uuidRepo, repoPtr, dashboardPtr)
+				updateDashboardData(uuidRepo, repoPtr, dashboardPtr, verbosePtr)
 			}
 		}
 	}
