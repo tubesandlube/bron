@@ -22,7 +22,8 @@ func parse(files []string) {
 	//errc := make(chan error, 1)
 	for _, file := range files {
 		fmt.Println("going to parse...", file)
-		go filterDistribution(file)
+		filterDistribution(file)
+		//go filterDistribution(file)
 		//fmt.Printf("output of dist, %v\n", l)
 		//fmt.Println("File:", file, ":", countLines(file))
 	}
