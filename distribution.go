@@ -7,9 +7,17 @@ import (
 
 )
 
-func filterDistribution(contentFile string) map[string]int {
+func filterDistribution(templates map[string]*Template, contentFile string) map[string]int {
 
 	counts := map[string]int{}
+
+	language := determineLanguage(templates, contentFile)
+
+	if language != "unknown" {
+		fmt.Println("language determined as", language)
+	} else {
+		fmt.Println("skipping loc filtering for", contentFile, " due to not being able to determine language.")
+	}
 
 // determine language
 // strip comments & count lines

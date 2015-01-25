@@ -59,19 +59,18 @@ func main() {
 		clonePath := "https://"+repoPtr+".git"
 		uuidRepo := cloneRepo(clonePath)
 
+		templates := templateParse("templates")
+		//fmt.Println(templates)
+
 		// XXX example calls through all commits
 		x, _ := getCommits(uuidRepo)
 		for _, commit := range x {
 			checkoutCommit(uuidRepo, commit)
 			// XXX simple channel starts, for now
 			files := getFiles(uuidRepo)
-			parse(files)
+			parse(files, templates)
 		}
 		checkoutCommit(uuidRepo, x[0])
-
-		// XXX test template parsing
-		templates := templateParse("templates")
-		fmt.Println(templates)
 
 		if vizPtr {
 			if !forcePtr {

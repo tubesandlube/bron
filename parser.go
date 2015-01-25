@@ -57,7 +57,9 @@ func templateParse(templatePath string) map[string]*Template {
 func templateLoad(templateFile string) *Template {
 
 	t := new(Template)
-	t.Name = templateFile
+	nameparts := regexp.MustCompile("[/.]").Split(templateFile, -1)
+	t.Name = nameparts[1]
+	//fmt.Println("setting name to", nameparts[1], "from ", templateFile)
 	section := "unknown"
 
 	sectionr, _ := regexp.Compile("^[\\w\\s]+\\:$")
@@ -85,10 +87,6 @@ func templateLoad(templateFile string) *Template {
 					if section == "extensions"  {
 						t.Extensions = param
 					}
-//					s := t.section
-//					s.param = param
-////t.section[param] = param
-//t{section: param}
 				} else {
 					//fmt.Println("skipping blank line", param)
 				}
