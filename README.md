@@ -1,5 +1,7 @@
 # bron
 
+<img src="http://beforeitsnews.com/mediadrop/uploads/2013/38/1589ea296eb82ead17d6b307601025236ec0b738.jpg">
+
 ## Dependencies
 
 ```
