@@ -42,7 +42,7 @@
 <a id="bron" class="anchor" href="#bron" aria-hidden="true"><span class="octicon octicon-link"></span></a>bron</h1>
 
 <p align="center">
-<img src="http://beforeitsnews.com/mediadrop/uploads/2013/38/1589ea296eb82ead17d6b307601025236ec0b738.jpg">
+<img src="https://raw.githubusercontent.com/gophergala/bron/master/images/bron.jpg">
 </p>
 
 <p>This hack was written by <a href="https://github.com/defermat">@defermat</a> and <a href="https://github.com/schvin">@schvin</a> as a submission in the first <a href="http://gophergala.com/">Gopher Gala</a> over the weekend of 24-25 January, 2015. Please give it a whirl and let us know what you think.</p>
@@ -50,6 +50,15 @@
 <p>Analysis of large source code repositories is always interesting, especially over long periods of time. Fun and useful to see various characteristics by language, who was actively contributing in a project, or when activity peaked. After coming across <a href="https://github.com/yaronn/blessed-contrib">blessed</a>, we knew we had a quick way visualize the analysis with no fuss or complications.</p>
 
 <p>Target audience is other developers or consumers of development projects. Easy to glean more information about a project by looking at the source from a high-level viewpoint.</p>
+
+<h2>
+<a id="visuals" class="anchor" href="#visuals" aria-hidden="true"><span class="octicon octicon-link"></span></a>Visuals</h2>
+
+<p>Screenshot of the <code>--viz=true</code> output from the <a href="https://github.com/github/hub">GitHub Hub repository</a>:</p>
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/gophergala/bron/master/images/bron-github-hub-gophergala-output.png">
+</p>
 
 <h2>
 <a id="dependencies-for-manual-installation" class="anchor" href="#dependencies-for-manual-installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies for manual installation</h2>
@@ -87,7 +96,7 @@
 
 <p>Note, the Docker image (from the Hub or from source) will already include all of the above mentioned dependencies, so you can skip those steps.</p>
 
-<p>Get it from the Docker Hub:</p>
+<p>Get it from the <a href="https://registry.hub.docker.com/u/tubesandlube/bron/dockerfile/">Docker Hub</a>:</p>
 
 <pre><code>docker pull tubesandlube/bron
 docker run -it bron -h
