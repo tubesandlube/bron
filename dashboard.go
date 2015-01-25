@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -132,11 +133,21 @@ func sortMap(m map[string]int) ([]int, map[int]string) {
 
 }
 
-func updateDashboardData(uuidRepo string, repoPtr string, dashboard string) {
+func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verbosePtr bool) {
 
 	// get data for dashboard
+	if verbosePtr {
+		fmt.Printf("\rprocessing languages ...")
+	}
 	languages, languageLines := barChartData(sortMap(countLinesPerLanguage(uuidRepo)))
+	if verbosePtr {
+		fmt.Printf("\rprocessing languages ... done.\n")
+		fmt.Println("\rprocessing authors ...")
+	}
 	authors := tableData(sortMap(countAuthorCommits(uuidRepo)))
+	if verbosePtr {
+		fmt.Printf("\rprocessing authors ... done.\n")
+	}
 
 	// XXX cleanup line charts
 	numLanguagesDataX := "x:["
@@ -150,6 +161,13 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string) {
 
 	x, y := getCommits(uuidRepo)
 	for i := len(x)-1; i >= 0; i-- {
+		if verbosePtr {
+			var percent float64
+			percent = float64(len(x))/float64(100)
+			if percent > 0 {
+				fmt.Printf("\rprocessing commits ... %.2g%% complete", float64((len(x)-i))/percent)
+			}
+		}
 		checkoutCommit(uuidRepo, x[i])
 
 		lineCount := 0
@@ -172,6 +190,8 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string) {
 		numFilesDataX += "'"+y[x[i]]["timestamp"]+"', "
 		numFilesDataY += "'"+strconv.Itoa(countFiles(uuidRepo))+"', "
 	}
+	fmt.Printf("\rprocessing commits ... 100.00%% complete      ")
+	fmt.Println()
 	checkoutCommit(uuidRepo, x[0])
 
 	numLanguagesData := "{"+numLanguagesDataX[0:len(numLanguagesDataX)-2]+"], "+numLanguagesDataY[0:len(numLanguagesDataY)-2]+"]"+"}"
