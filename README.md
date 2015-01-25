@@ -12,7 +12,7 @@ Target audience is other developers or consumers of development projects. Easy t
 
 ## Visuals
 
-Screenshot of the `--viz=true` output from the [GitHub Hub repository](https://github.com/github/hub)
+Screenshot of the `--viz=true` output from the [GitHub Hub repository](https://github.com/github/hub):
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/gophergala/bron/master/images/bron-github-hub-gophergala-output.png">
