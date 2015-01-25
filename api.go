@@ -14,7 +14,7 @@ func countFiles(repoPath string) int {
 
 func countLanguages(repoPath string) map[string]int {
 
-	// XXX tie-into languages defined in templates
+	// XXX tie-into getLanguages()
 
 	languages := map[string]int{}
 	files := getFiles(repoPath)
@@ -29,6 +29,13 @@ func countLanguages(repoPath string) map[string]int {
 	}
 
 	return languages
+
+}
+
+func getLanguages(map[string]int) {
+
+
+	// XXX tie-into languages defined in templates
 
 }
 
