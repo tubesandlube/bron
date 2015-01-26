@@ -89,7 +89,7 @@ go get github.com/gophergala/bron
 bron -h
 ```
 
-#### Using Docker Volumes to Persist Results
+#### Using Docker volumes to persist results
 
 ```
 docker run -it -v /home/go/src/github/gophergala/bron/db:/go/src/github.com/gophergala/bron/db bron -viz
