@@ -62,9 +62,6 @@ func main() {
 	}
 
 	if repoPtr != "" {
-		clonePath := "https://"+repoPtr+".git"
-		uuidRepo := cloneRepo(clonePath)
-
 		if !forcePtr {
 			if checkData(repoPtr, dashboardPtr, blessedPtr) {
 				if !quietPtr {
@@ -76,9 +73,13 @@ func main() {
 					}
 				}
 			} else {
+				clonePath := "https://"+repoPtr+".git"
+				uuidRepo := cloneRepo(clonePath)
 				updateDashboardData(uuidRepo, repoPtr, dashboardPtr, verbosePtr, vizPtr, quietPtr, statusPtr)
 			}
 		} else {
+			clonePath := "https://"+repoPtr+".git"
+			uuidRepo := cloneRepo(clonePath)
 			updateDashboardData(uuidRepo, repoPtr, dashboardPtr, verbosePtr, vizPtr, quietPtr, statusPtr)
 		}
 	}
