@@ -12,7 +12,7 @@ Target audience is other developers or consumers of development projects. Easy t
 
 ## Visuals
 
-Quick screencast demo and walkthrough is available [here on Youtube](https://www.youtube.com/watch?v=Qkkf3s6k_-M)
+Quick screencast demo and walkthrough is available [here on Youtube](https://www.youtube.com/watch?v=Qkkf3s6k_-M):
 
 <p align="center">
 <a href="https://www.youtube.com/watch?v=Qkkf3s6k_-M"><img src="https://raw.githubusercontent.com/gophergala/bron/master/images/bron-animated.gif" border="0"></a>
