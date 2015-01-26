@@ -12,10 +12,16 @@ Target audience is other developers or consumers of development projects. Easy t
 
 ## Visuals
 
-Screenshot of the `--viz=true` output from the [GitHub Hub repository](https://github.com/github/hub):
+Screenshot of the `--viz=true` output from the [GitHub/Hub repository](https://github.com/github/hub):
 
 <p align="center">
 <a href="https://raw.githubusercontent.com/gophergala/bron/master/images/bron-github-hub-gophergala-output.png"><img src="https://raw.githubusercontent.com/gophergala/bron/master/images/bron-github-hub-gophergala-output.png" border="0"></a>
+</p>
+
+Similarly from the [Docker/Docker repository](https://github.com/docker/docker):
+
+<p align="center">
+<a href="https://raw.githubusercontent.com/gophergala/bron/master/images/bron-docker-docker-gophergala-output.png"><img src="https://raw.githubusercontent.com/gophergala/bron/master/images/bron-docker-docker-gophergala-output.png" border="0"></a>
 </p>
 
 ## Dependencies for manual installation
