@@ -12,7 +12,7 @@ import (
 
 func checkData(repoName string, dashboard string, blessed string) bool {
 
-	data, err := ioutil.ReadFile("db/"+repoName+"/"+dashboard+".data")
+	data, err := ioutil.ReadFile("db/" + repoName + "/" + dashboard + ".data")
 	if err != nil {
 		return false
 	}
@@ -43,7 +43,7 @@ func saveData(repoName string, dashboard string, vals ...string) {
 
 	data := ""
 	for _, val := range vals {
-		data += val+"\n"
+		data += val + "\n"
 	}
 	d1 := []byte(data)
 
@@ -61,7 +61,7 @@ func updateData(filename string, varName string, data string) {
 
 	for i, line := range lines {
 		if strings.Contains(line, "$"+varName) {
-			lines[i] = "var "+varName+" = "+data
+			lines[i] = "var " + varName + " = " + data
 		}
 	}
 	output := strings.Join(lines, "\n")
@@ -74,10 +74,10 @@ func tableData(rowVals []int, invRows map[int]string) string {
 
 	table := "["
 
-	for i := len(rowVals)-1; i >= 0; i-- {
-		table += "['"+strings.Replace(invRows[rowVals[i]], "'", "\\'", -1)+"', '"+strconv.Itoa(rowVals[i])+"'], "
+	for i := len(rowVals) - 1; i >= 0; i-- {
+		table += "['" + strings.Replace(invRows[rowVals[i]], "'", "\\'", -1) + "', '" + strconv.Itoa(rowVals[i]) + "'], "
 	}
-	table = table[0:len(table)-2]+"]"
+	table = table[0:len(table)-2] + "]"
 
 	return table
 
@@ -89,21 +89,21 @@ func barChartData(barVals []int, invBars map[int]string) (string, string) {
 	y := "["
 
 	for _, k := range barVals {
-		x += "'"+strings.Replace(invBars[k], "'", "\\'", -1)+"', "
-		y += "'"+strconv.Itoa(k)+"', "
+		x += "'" + strings.Replace(invBars[k], "'", "\\'", -1) + "', "
+		y += "'" + strconv.Itoa(k) + "', "
 	}
-	x = x[0:len(x)-2]+"]"
-	y = y[0:len(y)-2]+"]"
+	x = x[0:len(x)-2] + "]"
+	y = y[0:len(y)-2] + "]"
 
 	return x, y
 
 }
 
-func bubbleSort(arr[] int) []int {
+func bubbleSort(arr []int) []int {
 
-	for i:=1; i< len(arr); i++ {
-		for j:=0; j < len(arr)-i; j++ {
-			if (arr[j] > arr[j+1]) {
+	for i := 1; i < len(arr); i++ {
+		for j := 0; j < len(arr)-i; j++ {
+			if arr[j] > arr[j+1] {
 				arr[j], arr[j+1] = arr[j+1], arr[j]
 			}
 		}
@@ -117,7 +117,7 @@ func sortMap(m map[string]int) ([]int, map[int]string) {
 
 	// inverting map
 	invMap := make(map[int]string, len(m))
-	for k,v := range m {
+	for k, v := range m {
 		invMap[v] = k
 	}
 
@@ -160,10 +160,10 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verb
 	numFilesDataY := "y:["
 
 	x, y := getCommits(uuidRepo)
-	for i := len(x)-1; i >= 0; i-- {
+	for i := len(x) - 1; i >= 0; i-- {
 		if (!quietPtr && verbosePtr) || statusPtr {
 			var percent float64
-			percent = float64(len(x))/float64(100)
+			percent = float64(len(x)) / float64(100)
 			if percent > 0 {
 				fmt.Printf("\rprocessing commits ... %.2g%% complete", float64((len(x)-i))/percent)
 			}
@@ -185,14 +185,14 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verb
 			languageCount += langMap[key]
 		}
 
-		numLanguagesDataX += "'"+y[x[i]]["timestamp"]+"', "
-		numLanguagesDataY += "'"+strconv.Itoa(languageCount)+"', "
-		numLinesDataX += "'"+y[x[i]]["timestamp"]+"', "
-		numLinesDataY += "'"+strconv.Itoa(lineCount)+"', "
-		numAuthorsDataX += "'"+y[x[i]]["timestamp"]+"', "
-		numAuthorsDataY += "'"+strconv.Itoa(countAuthorsByCommits(uuidRepo, x[i]))+"', "
-		numFilesDataX += "'"+y[x[i]]["timestamp"]+"', "
-		numFilesDataY += "'"+strconv.Itoa(countFiles(uuidRepo))+"', "
+		numLanguagesDataX += "'" + y[x[i]]["timestamp"] + "', "
+		numLanguagesDataY += "'" + strconv.Itoa(languageCount) + "', "
+		numLinesDataX += "'" + y[x[i]]["timestamp"] + "', "
+		numLinesDataY += "'" + strconv.Itoa(lineCount) + "', "
+		numAuthorsDataX += "'" + y[x[i]]["timestamp"] + "', "
+		numAuthorsDataY += "'" + strconv.Itoa(countAuthorsByCommits(uuidRepo, x[i])) + "', "
+		numFilesDataX += "'" + y[x[i]]["timestamp"] + "', "
+		numFilesDataY += "'" + strconv.Itoa(countFiles(uuidRepo)) + "', "
 	}
 	if (!quietPtr && verbosePtr) || statusPtr {
 		fmt.Printf("\rprocessing commits ... 100.00%% complete      ")
@@ -200,10 +200,10 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verb
 	}
 	checkoutCommit(uuidRepo, x[0])
 
-	numLanguagesData := "{"+numLanguagesDataX[0:len(numLanguagesDataX)-2]+"], "+numLanguagesDataY[0:len(numLanguagesDataY)-2]+"]"+"}"
-	numLinesData := "{"+numLinesDataX[0:len(numLinesDataX)-2]+"], "+numLinesDataY[0:len(numLinesDataY)-2]+"]"+"}"
-	numAuthorsData := "{"+numAuthorsDataX[0:len(numAuthorsDataX)-2]+"], "+numAuthorsDataY[0:len(numAuthorsDataY)-2]+"]"+"}"
-	numFilesData := "{"+numFilesDataX[0:len(numFilesDataX)-2]+"], "+numFilesDataY[0:len(numFilesDataY)-2]+"]"+"}"
+	numLanguagesData := "{" + numLanguagesDataX[0:len(numLanguagesDataX)-2] + "], " + numLanguagesDataY[0:len(numLanguagesDataY)-2] + "]" + "}"
+	numLinesData := "{" + numLinesDataX[0:len(numLinesDataX)-2] + "], " + numLinesDataY[0:len(numLinesDataY)-2] + "]" + "}"
+	numAuthorsData := "{" + numAuthorsDataX[0:len(numAuthorsDataX)-2] + "], " + numAuthorsDataY[0:len(numAuthorsDataY)-2] + "]" + "}"
+	numFilesData := "{" + numFilesDataX[0:len(numFilesDataX)-2] + "], " + numFilesDataY[0:len(numFilesDataY)-2] + "]" + "}"
 
 	saveData(repoPtr, dashboard, "languages|"+languages, "languageLines|"+languageLines, "authors|"+authors, "numLanguagesData|"+numLanguagesData, "numLinesData|"+numLinesData, "numAuthorsData|"+numAuthorsData, "numFilesData|"+numFilesData)
 
@@ -219,7 +219,7 @@ func showDashboard() {
 	check(chErr)
 	binary, lookErr := exec.LookPath("node")
 	check(lookErr)
-	args := []string{"node", "./dashboards/"+dashboardPtr+"/dashboard.js"}
+	args := []string{"node", "./dashboards/" + dashboardPtr + "/dashboard.js"}
 	env := os.Environ()
 	execErr := syscall.Exec(binary, args, env)
 	check(execErr)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/mgutz/ansi"
 
-//	"github.com/gophergala/bron/filters"
+	//	"github.com/gophergala/bron/filters"
 )
 
 var (
@@ -22,10 +22,10 @@ var (
 
 func colorize(msg string) string {
 
-	lime  := ansi.ColorCode("green+h:black")
+	lime := ansi.ColorCode("green+h:black")
 	reset := ansi.ColorCode("reset")
 
-	return(lime + msg + reset)
+	return (lime + msg + reset)
 
 }
 
@@ -73,12 +73,12 @@ func main() {
 					}
 				}
 			} else {
-				clonePath := "https://"+repoPtr+".git"
+				clonePath := "https://" + repoPtr + ".git"
 				uuidRepo := cloneRepo(clonePath)
 				updateDashboardData(uuidRepo, repoPtr, dashboardPtr, verbosePtr, vizPtr, quietPtr, statusPtr)
 			}
 		} else {
-			clonePath := "https://"+repoPtr+".git"
+			clonePath := "https://" + repoPtr + ".git"
 			uuidRepo := cloneRepo(clonePath)
 			updateDashboardData(uuidRepo, repoPtr, dashboardPtr, verbosePtr, vizPtr, quietPtr, statusPtr)
 		}

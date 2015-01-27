@@ -1,10 +1,8 @@
 package main
 
 import (
-
 	"fmt"
 	"io/ioutil"
-
 )
 
 func filterDistribution(templates map[string]*Template, contentFile string, verbosePtr bool, quietPtr bool, statusPtr bool) map[string]int {
@@ -13,7 +11,7 @@ func filterDistribution(templates map[string]*Template, contentFile string, verb
 
 	language, t := determineLanguage(templates, contentFile, verbosePtr, quietPtr)
 
-	if (!quietPtr && verbosePtr) {
+	if !quietPtr && verbosePtr {
 		if language != "unknown" {
 			fmt.Println("language determined as", language)
 
@@ -26,17 +24,17 @@ func filterDistribution(templates map[string]*Template, contentFile string, verb
 		}
 	}
 
-// determine language
-// strip comments & count lines
-// strip white space and count
-// count remainder
+	// determine language
+	// strip comments & count lines
+	// strip white space and count
+	// count remainder
 
 	//coder, _ := regexp.Compile("^[^\\s]
 
 	file, err := ioutil.ReadFile(contentFile)
 	check(err)
 
-	if (!quietPtr && verbosePtr) {
+	if !quietPtr && verbosePtr {
 		fmt.Println("found", len(file), "characters in file", contentFile)
 	}
 
