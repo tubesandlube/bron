@@ -33,9 +33,9 @@ func countLanguages(repoPath string) map[string]int {
 
 }
 
-func determineLanguage(templates map[string]*Template, file string, verbosePtr bool, quietPtr bool) (string, *Template) {
+func determineLanguage(templates map[string]*Template, file string, flagBools []bool) (string, *Template) {
 
-	if !quietPtr && verbosePtr {
+	if !flagBools[0] && flagBools[2] {
 		fmt.Println("checking language type for file", file)
 	}
 
@@ -47,7 +47,7 @@ func determineLanguage(templates map[string]*Template, file string, verbosePtr b
 		e := t.Extensions
 		//fmt.Println("checking provided extension", ext, "against template extension:", e)
 		if ext == e {
-			if !quietPtr && verbosePtr {
+			if !flagBools[0] && flagBools[2] {
 				fmt.Println("found match...")
 			}
 			language = t.Name

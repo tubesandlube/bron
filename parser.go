@@ -21,7 +21,7 @@ type Template struct {
 	Libraries   map[string]string
 }
 
-func templateParse(templatePath string, verbosePtr bool, quietPtr bool, statusPtr bool) map[string]*Template {
+func templateParse(templatePath string, flagBools []bool) map[string]*Template {
 
 	count := 0
 
@@ -33,7 +33,7 @@ func templateParse(templatePath string, verbosePtr bool, quietPtr bool, statusPt
 		// XXX
 		if r.MatchString(file) && !skip.MatchString(file) {
 			count++
-			if !quietPtr && verbosePtr {
+			if !flagBools[0] && flagBools[2] {
 				fmt.Println("found a specific template:", file)
 			}
 		}
@@ -41,14 +41,14 @@ func templateParse(templatePath string, verbosePtr bool, quietPtr bool, statusPt
 	// XXX fix handling count
 	templates := map[string]*Template{}
 
-	if !quietPtr && verbosePtr {
+	if !flagBools[0] && flagBools[2] {
 		fmt.Println("found a few templates:", count)
 	}
 
 	for _, file := range files {
 		// XXX
 		if r.MatchString(file) && !skip.MatchString(file) {
-			t := templateLoad(file, verbosePtr, quietPtr, statusPtr)
+			t := templateLoad(file, flagBools)
 			templates[t.Name] = t
 		}
 	}
@@ -57,7 +57,7 @@ func templateParse(templatePath string, verbosePtr bool, quietPtr bool, statusPt
 
 }
 
-func templateLoad(templateFile string, verbosePtr bool, quietPtr bool, statusPtr bool) *Template {
+func templateLoad(templateFile string, flagBools []bool) *Template {
 
 	t := new(Template)
 	nameparts := regexp.MustCompile("[/.]").Split(templateFile, -1)
@@ -77,23 +77,23 @@ func templateLoad(templateFile string, verbosePtr bool, quietPtr bool, statusPtr
 	for scanner.Scan() {
 		if sectionr.MatchString(scanner.Text()) {
 			section = scanner.Text()[:len(scanner.Text())-1]
-			if !quietPtr && verbosePtr {
+			if !flagBools[0] && flagBools[2] {
 				fmt.Println("found section", section, "from file", templateFile)
 			}
 		} else {
 			parts := regexp.MustCompile(": ").Split(scanner.Text(), 2)
 			param := cleanr.ReplaceAllString(parts[0], "")
 			if len(parts) > 1 {
-				if !quietPtr && verbosePtr {
+				if !flagBools[0] && flagBools[2] {
 					fmt.Println("adding content match", parts[1], "to param", param)
 				}
 				// XXX literal issue
 				if section == "names" {
-					if !quietPtr && verbosePtr {
+					if !flagBools[0] && flagBools[2] {
 						fmt.Println(colorize("found names section"))
 					}
 					if param == "comments" {
-						if !quietPtr && verbosePtr {
+						if !flagBools[0] && flagBools[2] {
 							fmt.Println("found comments section(s)", parts[1])
 						}
 						t.Comments = parts[1]
@@ -101,7 +101,7 @@ func templateLoad(templateFile string, verbosePtr bool, quietPtr bool, statusPtr
 				}
 			} else {
 				if len(param) > 0 {
-					if !quietPtr && verbosePtr {
+					if !flagBools[0] && flagBools[2] {
 						fmt.Println("adding single param", param, "to section", section)
 					}
 					// XXX literal issue here, ugly

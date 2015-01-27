@@ -10,15 +10,15 @@ import (
 	"syscall"
 )
 
-func checkData(repoName string, dashboard string, blessed string) bool {
+func checkData(flagStrings []string) bool {
 
-	data, err := ioutil.ReadFile("db/" + repoName + "/" + dashboard + ".data")
+	data, err := ioutil.ReadFile("db/" + flagStrings[2] + "/" + flagStrings[1] + ".data")
 	if err != nil {
 		return false
 	}
 	lines := strings.Split(string(data), "\n")
 
-	chErr := os.Chdir(blessed)
+	chErr := os.Chdir(flagStrings[0])
 	if chErr != nil {
 		return false
 	}
@@ -28,7 +28,7 @@ func checkData(repoName string, dashboard string, blessed string) bool {
 			if len(dt) < 2 {
 				return false
 			}
-			updateData("dashboards/"+dashboardPtr+"/dashboard.js", dt[0], dt[1])
+			updateData("dashboards/"+flagStrings[1]+"/dashboard.js", dt[0], dt[1])
 		}
 	}
 
@@ -36,9 +36,9 @@ func checkData(repoName string, dashboard string, blessed string) bool {
 
 }
 
-func saveData(repoName string, dashboard string, vals ...string) {
+func saveData(flagStrings []string, vals ...string) {
 
-	err := os.MkdirAll("db/"+repoName, 0644)
+	err := os.MkdirAll("db/"+flagStrings[2], 0644)
 	check(err)
 
 	data := ""
@@ -47,7 +47,7 @@ func saveData(repoName string, dashboard string, vals ...string) {
 	}
 	d1 := []byte(data)
 
-	err = ioutil.WriteFile("db/"+repoName+"/"+dashboard+".data", d1, 0644)
+	err = ioutil.WriteFile("db/"+flagStrings[2]+"/"+flagStrings[1]+".data", d1, 0644)
 	check(err)
 
 }
@@ -133,19 +133,19 @@ func sortMap(m map[string]int) ([]int, map[int]string) {
 
 }
 
-func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verbosePtr bool, vizPtr bool, quietPtr bool, statusPtr bool) {
+func updateDashboardData(uuidRepo string, flagStrings []string, flagBools []bool) {
 
 	// get data for dashboard
-	if (!quietPtr && verbosePtr) || statusPtr {
+	if (!flagBools[0] && flagBools[2]) || flagBools[1] {
 		fmt.Printf("\rprocessing languages ...")
 	}
 	languages, languageLines := barChartData(sortMap(countLinesPerLanguage(uuidRepo)))
-	if (!quietPtr && verbosePtr) || statusPtr {
+	if (!flagBools[2] && flagBools[2]) || flagBools[1] {
 		fmt.Printf("\rprocessing languages ... done.\n")
 		fmt.Printf("\rprocessing authors ...")
 	}
 	authors := tableData(sortMap(countAuthorCommits(uuidRepo)))
-	if (!quietPtr && verbosePtr) || statusPtr {
+	if (!flagBools[0] && flagBools[2]) || flagBools[1] {
 		fmt.Printf("\rprocessing authors ... done.\n")
 	}
 
@@ -161,7 +161,7 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verb
 
 	x, y := getCommits(uuidRepo)
 	for i := len(x) - 1; i >= 0; i-- {
-		if (!quietPtr && verbosePtr) || statusPtr {
+		if (!flagBools[0] && flagBools[2]) || flagBools[1] {
 			var percent float64
 			percent = float64(len(x)) / float64(100)
 			if percent > 0 {
@@ -173,8 +173,8 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verb
 		lineCount := 0
 		files := getFiles(uuidRepo)
 
-		templates := templateParse("templates", verbosePtr, quietPtr, statusPtr)
-		parse(files, templates, verbosePtr, quietPtr, statusPtr)
+		templates := templateParse("templates", flagBools)
+		parse(files, templates, flagBools)
 
 		for _, file := range files {
 			lineCount += countLines(file)
@@ -194,7 +194,7 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verb
 		numFilesDataX += "'" + y[x[i]]["timestamp"] + "', "
 		numFilesDataY += "'" + strconv.Itoa(countFiles(uuidRepo)) + "', "
 	}
-	if (!quietPtr && verbosePtr) || statusPtr {
+	if (!flagBools[0] && flagBools[2]) || flagBools[1] {
 		fmt.Printf("\rprocessing commits ... 100.00%% complete      ")
 		fmt.Println()
 	}
@@ -205,21 +205,21 @@ func updateDashboardData(uuidRepo string, repoPtr string, dashboard string, verb
 	numAuthorsData := "{" + numAuthorsDataX[0:len(numAuthorsDataX)-2] + "], " + numAuthorsDataY[0:len(numAuthorsDataY)-2] + "]" + "}"
 	numFilesData := "{" + numFilesDataX[0:len(numFilesDataX)-2] + "], " + numFilesDataY[0:len(numFilesDataY)-2] + "]" + "}"
 
-	saveData(repoPtr, dashboard, "languages|"+languages, "languageLines|"+languageLines, "authors|"+authors, "numLanguagesData|"+numLanguagesData, "numLinesData|"+numLinesData, "numAuthorsData|"+numAuthorsData, "numFilesData|"+numFilesData)
+	saveData(flagStrings, "languages|"+languages, "languageLines|"+languageLines, "authors|"+authors, "numLanguagesData|"+numLanguagesData, "numLinesData|"+numLinesData, "numAuthorsData|"+numAuthorsData, "numFilesData|"+numFilesData)
 
-	if vizPtr {
-		checkData(repoPtr, dashboard, blessedPtr)
-		showDashboard()
+	if flagBools[3] {
+		checkData(flagStrings)
+		showDashboard(flagStrings)
 	}
 }
 
-func showDashboard() {
+func showDashboard(flagStrings []string) {
 
-	chErr := os.Chdir(blessedPtr)
+	chErr := os.Chdir(flagStrings[0])
 	check(chErr)
 	binary, lookErr := exec.LookPath("node")
 	check(lookErr)
-	args := []string{"node", "./dashboards/" + dashboardPtr + "/dashboard.js"}
+	args := []string{"node", "./dashboards/" + flagStrings[1] + "/dashboard.js"}
 	env := os.Environ()
 	execErr := syscall.Exec(binary, args, env)
 	check(execErr)
