@@ -123,7 +123,7 @@ func sortMap(m map[string]int) ([]int, map[int]string) {
 
 	// sorting
 	sortedKeys := make([]int, len(invMap))
-	var i int = 0
+	i := 0
 	for k := range invMap {
 		sortedKeys[i] = k
 		i++
