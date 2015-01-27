@@ -23,7 +23,7 @@ func countLanguages(repoPath string) map[string]int {
 	for _, file := range files {
 		ext := strings.Split(file, ".")
 		if _, ok := languages[ext[len(ext)-1]]; ok {
-			languages[ext[len(ext)-1]] = languages[ext[len(ext)-1]]+1
+			languages[ext[len(ext)-1]] = languages[ext[len(ext)-1]] + 1
 		} else {
 			languages[ext[len(ext)-1]] = 1
 		}
@@ -33,21 +33,21 @@ func countLanguages(repoPath string) map[string]int {
 
 }
 
-func determineLanguage(templates map[string]*Template, file string, verbosePtr bool, quietPtr bool) (string, *Template) {
+func determineLanguage(templates map[string]*Template, file string, flagBools []bool) (string, *Template) {
 
-	if (!quietPtr && verbosePtr) {
+	if !flagBools[0] && flagBools[2] {
 		fmt.Println("checking language type for file", file)
 	}
 
 	parts := strings.Split(file, ".")
-	ext := "." + parts[len(parts)-1];
+	ext := "." + parts[len(parts)-1]
 	language := "unknown"
 
 	for _, t := range templates {
 		e := t.Extensions
 		//fmt.Println("checking provided extension", ext, "against template extension:", e)
 		if ext == e {
-			if (!quietPtr && verbosePtr) {
+			if !flagBools[0] && flagBools[2] {
 				fmt.Println("found match...")
 			}
 			language = t.Name
@@ -75,7 +75,7 @@ func countLinesPerLanguage(repoPath string) map[string]int {
 	for _, file := range files {
 		ext := strings.Split(file, ".")
 		if _, ok := counts[ext[len(ext)-1]]; ok {
-			counts[ext[len(ext)-1]] = counts[ext[len(ext)-1]]+countLines(file)
+			counts[ext[len(ext)-1]] = counts[ext[len(ext)-1]] + countLines(file)
 		} else {
 			counts[ext[len(ext)-1]] = countLines(file)
 		}
@@ -118,7 +118,7 @@ func countAuthorsByCommits(repoPath string, commit string) int {
 		for _, c := range commits {
 			if c == k {
 				if _, ok := counts[commit["author"]]; ok {
-					counts[commit["author"]] = counts[commit["author"]]+1
+					counts[commit["author"]] = counts[commit["author"]] + 1
 				} else {
 					counts[commit["author"]] = 1
 				}
@@ -136,7 +136,7 @@ func countAuthorCommits(repoPath string) map[string]int {
 	_, commits := getCommits(repoPath)
 	for _, commit := range commits {
 		if _, ok := counts[commit["author"]]; ok {
-			counts[commit["author"]] = counts[commit["author"]]+1
+			counts[commit["author"]] = counts[commit["author"]] + 1
 		} else {
 			counts[commit["author"]] = 1
 		}
