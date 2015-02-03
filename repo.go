@@ -41,7 +41,7 @@ func getCommits(repoPath string) ([]string, map[string]map[string]string) {
 	lines := strings.Split(string(revOut), "\n")
 	prevCommit := ""
 	for i, val := range lines {
-		if i % 2 != 0 {
+		if i%2 != 0 {
 			// XXX error check to ensure there are exactly 3 splits
 			components := strings.Split(val[1:len(val)-1], "|")
 			if _, ok := commits[prevCommit]; ok {
@@ -131,6 +131,6 @@ func cloneRepo(repo string) string {
 		fmt.Println(string(cloneOut))
 	}
 
-	return "/tmp/"+uuidRepo
+	return "/tmp/" + uuidRepo
 
 }

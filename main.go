@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/mgutz/ansi"
 
-//	"github.com/gophergala/bron/filters"
+	//	"github.com/gophergala/bron/filters"
 )
 
 var (
@@ -22,10 +22,10 @@ var (
 
 func colorize(msg string) string {
 
-	lime  := ansi.ColorCode("green+h:black")
+	lime := ansi.ColorCode("green+h:black")
 	reset := ansi.ColorCode("reset")
 
-	return(lime + msg + reset)
+	return (lime + msg + reset)
 
 }
 
@@ -61,26 +61,29 @@ func main() {
 		}
 	}
 
+	flagStrings := []string{blessedPtr, dashboardPtr, repoPtr, repoPathPtr}
+	flagBools := []bool{quietPtr, statusPtr, verbosePtr, vizPtr, forcePtr}
+
 	if repoPtr != "" {
 		if !forcePtr {
-			if checkData(repoPtr, dashboardPtr, blessedPtr) {
+			if checkData(flagStrings) {
 				if !quietPtr {
 					if verbosePtr {
 						fmt.Println("found existing data for", repoPtr, "using that ...")
 					}
 					if vizPtr {
-						showDashboard()
+						showDashboard(flagStrings)
 					}
 				}
 			} else {
-				clonePath := "https://"+repoPtr+".git"
+				clonePath := "https://" + repoPtr + ".git"
 				uuidRepo := cloneRepo(clonePath)
-				updateDashboardData(uuidRepo, repoPtr, dashboardPtr, verbosePtr, vizPtr, quietPtr, statusPtr)
+				updateDashboardData(uuidRepo, flagStrings, flagBools)
 			}
 		} else {
-			clonePath := "https://"+repoPtr+".git"
+			clonePath := "https://" + repoPtr + ".git"
 			uuidRepo := cloneRepo(clonePath)
-			updateDashboardData(uuidRepo, repoPtr, dashboardPtr, verbosePtr, vizPtr, quietPtr, statusPtr)
+			updateDashboardData(uuidRepo, flagStrings, flagBools)
 		}
 	}
 
