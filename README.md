@@ -1,7 +1,7 @@
 # bron
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/gophergala/bron/master/images/bron.jpg">
+<img src="https://raw.githubusercontent.com/tubesandlube/bron/master/images/bron.jpg">
 </p>
 
 This hack was written by [@defermat](https://github.com/defermat) and [@schvin](https://github.com/schvin) as a submission in the first [Gopher Gala](http://gophergala.com/) over the weekend of 24-25 January, 2015. Please give it a whirl and let us know what you think.
@@ -15,19 +15,19 @@ Target audience is other developers or consumers of development projects. Easy t
 Quick screencast demo and walkthrough is available [here on Youtube](https://www.youtube.com/watch?v=Qkkf3s6k_-M):
 
 <p align="center">
-<a href="https://www.youtube.com/watch?v=Qkkf3s6k_-M"><img src="https://raw.githubusercontent.com/gophergala/bron/master/images/bron-animated.gif" border="0"></a>
+<a href="https://www.youtube.com/watch?v=Qkkf3s6k_-M"><img src="https://raw.githubusercontent.com/tubsandlube/bron/master/images/bron-animated.gif" border="0"></a>
 </p>
 
 Screenshot of the `--viz=true` output from the [GitHub/Hub repository](https://github.com/github/hub):
 
 <p align="center">
-<a href="https://raw.githubusercontent.com/gophergala/bron/master/images/bron-github-hub-gophergala-output.png"><img src="https://raw.githubusercontent.com/gophergala/bron/master/images/bron-github-hub-gophergala-output.png" border="0"></a>
+<a href="https://raw.githubusercontent.com/tubesandlube/bron/master/images/bron-github-hub-gophergala-output.png"><img src="https://raw.githubusercontent.com/tubesandlube/bron/master/images/bron-github-hub-gophergala-output.png" border="0"></a>
 </p>
 
 Similarly from the [Docker/Docker repository](https://github.com/docker/docker):
 
 <p align="center">
-<a href="https://raw.githubusercontent.com/gophergala/bron/master/images/bron-docker-docker-gophergala-output.png"><img src="https://raw.githubusercontent.com/gophergala/bron/master/images/bron-docker-docker-gophergala-output.png" border="0"></a>
+<a href="https://raw.githubusercontent.com/tubesandlube/bron/master/images/bron-docker-docker-gophergala-output.png"><img src="https://raw.githubusercontent.com/tubesandlube/bron/master/images/bron-docker-docker-gophergala-output.png" border="0"></a>
 </p>
 
 ## Dependencies for manual installation
@@ -41,7 +41,7 @@ If using the `-viz` option, you'll need to have [blessed-contrib](https://github
 For example if your `bron` src directory is located at:
 
 ```
-/go/src/github.com/gophergala/bron
+/go/src/github.com/tubesandlube/bron
 ```
 
 Then your `blessed-contrib` src directory should be located somewhere like this:
@@ -60,7 +60,7 @@ cp -R dashboards ../../yaronn/blessed-contrib/
 
 #### Run on Nitrous:
 
-[![Hack gophergala/bron on Nitrous](https://d3o0mnbgv6k92a.cloudfront.net/assets/hack-l-v1-d464cf470a5da050619f6f247a1017ec.png)](https://www.nitrous.io/hack_button?source=embed&runtime=go&repo=gophergala%2Fbron)
+[![Hack tubesandlube/bron on Nitrous](https://d3o0mnbgv6k92a.cloudfront.net/assets/hack-l-v1-d464cf470a5da050619f6f247a1017ec.png)](https://www.nitrous.io/hack_button?source=embed&runtime=go&repo=tubesandlube%2Fbron)
 
 #### Run on Docker:
 
@@ -76,7 +76,7 @@ docker run -it bron -h
 Or, build it yourself:
 
 ```
-git clone https://github.com/gophergala/bron.git
+git clone https://github.com/tubesandlube/bron.git
 cd bron
 docker build -t bron .
 docker run -it bron -h
@@ -85,12 +85,12 @@ docker run -it bron -h
 #### Install using Go:
 
 ```
-go get github.com/gophergala/bron
+go get github.com/tubesandlube/bron
 bron -h
 ```
 
 #### Using Docker volumes to persist results
 
 ```
-docker run -it -v /home/go/src/github/gophergala/bron/db:/go/src/github.com/gophergala/bron/db bron -viz
+docker run -it -v /home/go/src/github/tubesandlube/bron/db:/go/src/github.com/tubesandlube/bron/db bron -viz
 ```
