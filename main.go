@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/mgutz/ansi"
 
-	//	"github.com/gophergala/bron/filters"
+	//	"github.com/tubesandlube/bron/filters"
 )
 
 var (
@@ -40,7 +40,7 @@ func main() {
 	flag.StringVar(&blessedPtr, "blessedPath", "/go/src/github.com/yaronn/blessed-contrib", "Path where blessed-contrib is installed")
 	flag.StringVar(&dashboardPtr, "dashboard", "example", "Name of dashboard to use for visualization")
 	flag.BoolVar(&quietPtr, "q", false, "Supresses all output, except status")
-	flag.StringVar(&repoPtr, "repo", "github.com/gophergala/bron", "Git repository to scan")
+	flag.StringVar(&repoPtr, "repo", "github.com/tubesandlube/bron", "Git repository to scan")
 	flag.StringVar(&repoPathPtr, "path", "", "Git repository file path to scan (not currently implemented)")
 	flag.BoolVar(&statusPtr, "s", true, "Outputs status of completion of analysis")
 	flag.BoolVar(&verbosePtr, "v", false, "verbosity level")
