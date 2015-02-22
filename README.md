@@ -1,5 +1,7 @@
 # bron
 
+[![Join the chat at https://gitter.im/tubesandlube/bron](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tubesandlube/bron?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 <p align="center">
 <img src="https://raw.githubusercontent.com/tubesandlube/bron/master/images/bron.jpg">
 </p>
